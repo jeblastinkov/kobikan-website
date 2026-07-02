@@ -202,13 +202,6 @@ function Nav({
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-1 text-xs font-medium">
             <button
-              onClick={() => setLang("sk")}
-              className={`px-1.5 py-0.5 ${lang === "sk" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
-            >
-              SK
-            </button>
-            <span className="text-[color:var(--color-neutral-gray)]">|</span>
-            <button
               onClick={() => setLang("en")}
               className={`px-1.5 py-0.5 ${lang === "en" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
             >
@@ -219,7 +212,14 @@ function Nav({
               onClick={() => setLang("ja")}
               className={`px-1.5 py-0.5 ${lang === "ja" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
             >
-              JP
+              JPN
+            </button>
+            <span className="text-[color:var(--color-neutral-gray)]">|</span>
+            <button
+              onClick={() => setLang("sk")}
+              className={`px-1.5 py-0.5 ${lang === "sk" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
+            >
+              SK
             </button>
           </div>
           <CtaButton onClick={onCta} size="sm">
