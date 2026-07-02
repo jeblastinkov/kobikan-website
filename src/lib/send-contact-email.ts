@@ -3,11 +3,24 @@ import { Resend } from "resend";
 import type { ContactFormData } from "./contact-schema";
 
 function requireEnv(name: string): string {
-  const value = process.env[name];
+  const value = process.env[name]?.trim();
   if (!value) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
+}
+
+function parseContactRecipients(value: string): string[] {
+  const emails = value
+    .split(",")
+    .map((email) => email.trim())
+    .filter(Boolean);
+
+  if (emails.length === 0) {
+    throw new Error("CONTACT_TO_EMAIL must include at least one email address");
+  }
+
+  return emails;
 }
 
 function escapeHtml(text: string): string {
@@ -21,7 +34,7 @@ function escapeHtml(text: string): string {
 export async function sendContactEmail(data: ContactFormData): Promise<void> {
   const apiKey = requireEnv("RESEND_API_KEY");
   const from = requireEnv("RESEND_FROM_EMAIL");
-  const to = requireEnv("CONTACT_TO_EMAIL");
+  const to = parseContactRecipients(requireEnv("CONTACT_TO_EMAIL"));
 
   const resend = new Resend(apiKey);
 
@@ -40,7 +53,7 @@ export async function sendContactEmail(data: ContactFormData): Promise<void> {
 
   const { error } = await resend.emails.send({
     from,
-    to: [to],
+    to,
     replyTo: data.email,
     subject: `KobiKan demo request — ${data.name} (${data.company})`,
     html,
