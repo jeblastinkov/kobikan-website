@@ -1,6 +1,7 @@
-export type Lang = "sk" | "en";
+export type Lang = "sk" | "en" | "ja";
 
 export type Dict = {
+  meta: { title: string; description: string; orgDescription: string };
   nav: {
     features: string;
     how: string;
@@ -80,10 +81,38 @@ export type Dict = {
     success: string;
   };
   footer: { rights: string; powered: string };
+  mockups: {
+    heroChat: {
+      header: string;
+      q1: string;
+      a1: string;
+      source: string;
+      q2: string;
+      a2: string;
+    };
+    features: {
+      chatHeader: string;
+      chatQ: string;
+      chatA: string;
+      chatSource: string;
+      voiceTranscript: string;
+      voiceSuccess: string;
+      logbookHeader: string;
+      logbookRows: { id: string; title: string; who: string }[];
+      integrations: string[];
+      alerts: { text: string; priority: string }[];
+    };
+  };
 };
 
 export const T: Record<Lang, Dict> = {
   sk: {
+    meta: {
+      title: "KobiKan — AI asistent údržby pre priemyselné prevádzky",
+      description:
+        "KobiKan zachytí znalosti vašej prevádzky a mení ich na okamžité odpovede pre každého technika. Pilot za 14 dní. On-prem alebo cloud. Projekt firmy Touch4IT.",
+      orgDescription: "AI asistent údržby pre priemyselné prevádzky.",
+    },
     nav: {
       features: "Funkcie",
       how: "Ako to funguje",
@@ -316,8 +345,43 @@ export const T: Record<Lang, Dict> = {
       success: "Ďakujeme, ozveme sa do 24 hodín.",
     },
     footer: { rights: "Všetky práva vyhradené.", powered: "Powered by Touch4IT" },
+    mockups: {
+      heroChat: {
+        header: "kobikan.app / line-7",
+        q1: "Error E-417 na CNC linke 7. Čo robím?",
+        a1: "E-417 = spindle overload. Skontrolujte chladenie a tlak (≥ 4,2 bar). V 73 % prípadov stačí výmena filtra F-22.",
+        source: "Zdroj: manual_cnc_v3.pdf · str. 142 · logbook #1847",
+        q2: "Aký je SKU filtra?",
+        a2: "F-22-A · 4 ks na sklade · regál B3-04",
+      },
+      features: {
+        chatHeader: "chat · línia 7",
+        chatQ: "Aké je nastavenie tlaku pre F-22?",
+        chatA: "4,2–4,8 bar. Pri poklese pod 4,0 bar zastaviť linku.",
+        chatSource: "→ manual_cnc_v3.pdf p.142",
+        voiceTranscript: '"Vymenil som filter F-22, tlak je späť na 4,5 bar."',
+        voiceSuccess: "✓ Záznam #1848 vytvorený",
+        logbookHeader: "logbook · CNC-07",
+        logbookRows: [
+          { id: "#1847", title: "Spindle overload", who: "J. Mráz" },
+          { id: "#1812", title: "Coolant leak", who: "P. Novák" },
+          { id: "#1798", title: "Sensor calibrate", who: "T. Kováč" },
+        ],
+        integrations: ["Dokumenty", "PLC programy", "MES / SQL", "ERP / SAP", "Schémy", "Logbook"],
+        alerts: [
+          { text: "CNC-07 alarm E-417", priority: "P1" },
+          { text: "Press-02 service due", priority: "P2" },
+        ],
+      },
+    },
   },
   en: {
+    meta: {
+      title: "KobiKan — AI maintenance assistant for industrial operations",
+      description:
+        "KobiKan captures your plant knowledge and turns it into instant answers for every technician. Pilot in 14 days. On-prem or cloud. A Touch4IT project.",
+      orgDescription: "AI maintenance assistant for industrial operations.",
+    },
     nav: {
       features: "Features",
       how: "How It Works",
@@ -550,5 +614,301 @@ export const T: Record<Lang, Dict> = {
       ],
     },
     footer: { rights: "All rights reserved.", powered: "Powered by Touch4IT" },
+    mockups: {
+      heroChat: {
+        header: "kobikan.app / line-7",
+        q1: "Error E-417 on CNC line 7. What do I do?",
+        a1: "E-417 = spindle overload. Check cooling and pressure (≥ 4.2 bar). In 73% of cases replacing filter F-22 is enough.",
+        source: "Source: manual_cnc_v3.pdf · p. 142 · logbook #1847",
+        q2: "What is the filter SKU?",
+        a2: "F-22-A · 4 in stock · aisle B3-04",
+      },
+      features: {
+        chatHeader: "chat · line 7",
+        chatQ: "What is the pressure setting for F-22?",
+        chatA: "4.2–4.8 bar. Stop the line if pressure drops below 4.0 bar.",
+        chatSource: "→ manual_cnc_v3.pdf p.142",
+        voiceTranscript: '"Replaced filter F-22, pressure is back at 4.5 bar."',
+        voiceSuccess: "✓ Entry #1848 created",
+        logbookHeader: "logbook · CNC-07",
+        logbookRows: [
+          { id: "#1847", title: "Spindle overload", who: "J. Mráz" },
+          { id: "#1812", title: "Coolant leak", who: "P. Novák" },
+          { id: "#1798", title: "Sensor calibrate", who: "T. Kováč" },
+        ],
+        integrations: [
+          "Documents",
+          "PLC programs",
+          "MES / SQL",
+          "ERP / SAP",
+          "Schematics",
+          "Logbook",
+        ],
+        alerts: [
+          { text: "CNC-07 alarm E-417", priority: "P1" },
+          { text: "Press-02 service due", priority: "P2" },
+        ],
+      },
+    },
+  },
+  ja: {
+    meta: {
+      title: "KobiKan — 産業現場向けAIメンテナンスアシスタント",
+      description:
+        "KobiKanは現場の知識を捉え、すべての技術者に即座の回答を提供します。14日間のパイロット。オンプレまたはクラウド。Touch4ITのプロジェクト。",
+      orgDescription: "産業現場向けAIメンテナンスアシスタント。",
+    },
+    nav: {
+      features: "機能",
+      how: "仕組み",
+      why: "選ばれる理由",
+      deployment: "導入",
+      contact: "お問い合わせ",
+      about: "会社概要",
+      faq: "FAQ",
+      cta: "デモを予約",
+    },
+    hero: {
+      eyebrow: "メンテナンス向けAIアシスタント",
+      h1a: "最高の技術者が定年を迎えました。",
+      h1b: "KobiKanは残ります。",
+      sub: "KobiKanは現場の知識を捉え、すべての技術者、すべてのシフト、すべての機械に即座の回答を届けます。",
+      cta: "デモを予約",
+      secondary: "仕組みを見る",
+      stat1: "の経験豊富な技術者が5〜10年以内に定年を迎える",
+      stat2: "時間/週 — 正しい情報を探すために失われる",
+      stat3: "の故障は情報不足が原因",
+    },
+    problem: {
+      label: "ソリューション",
+      headline: "知識・データ・メンテナンスを統合する1つのプラットフォーム。",
+      items: [
+        {
+          title: "データとコミュニケーションへの統合アクセス",
+          body: "SAP、MES、CMMS、技術マニュアル、回路図、I/Oリスト、PLCプログラムを1か所に接続。技術者は馴染みのあるチャットUIで自然言語で質問 — KobiKanがシステム横断で回答を見つけ、常に出典を表示。同じUIで技術者同士の連絡、引き継ぎ、手順の共有も可能 — チームのコミュニケーションがすべて1か所に集約され、ナレッジベースの一部になります。",
+        },
+        {
+          title: "メンテナンス記録のデジタル化",
+          body: "紙の日誌や散在するExcelは終わり。修理・点検・インシデント記録を音声入力または構造化フォームで記録 — シフト・機械・工場をまたいで統一フォーマット。MTTR/MTBF分析や予知保全に即座に活用可能。",
+        },
+        {
+          title: "すべての技術者向けAIアシスタント",
+          body: "現場を知るスマートな同僚 — マニュアル、故障履歴、ベテランのノウハウ。診断をステップごとに案内し、自社データで検証された解決策を提案。解決するたびに学習。24時間365日、日本語・英語・スロバキア語対応。",
+        },
+      ],
+      closing: "3つの柱。1つのプラットフォーム。即座の効果。",
+    },
+    intro: {
+      label: "KobiKanのご紹介",
+      headline: "24時間365日利用できるデジタル同僚。",
+      items: [
+        { title: "理解する", body: "マニュアル、PLCコード、サービス記録、チームの専門知識。" },
+        { title: "回答する", body: "即座に、正確に、技術者の言葉で、出典付き。" },
+        { title: "統合する", body: "既存システムと連携。置き換え不要。" },
+        { title: "学習する", body: "解決するたびにシステムが賢くなる。" },
+      ],
+    },
+    features: {
+      eyebrow: "主要機能",
+      headline: "日常の現場運用のために構築。",
+      list: [
+        {
+          tag: "会話型AIインターフェース",
+          title: "何でも聞いてください。数秒で回答。",
+          body: "直感的なUI — トレーニング不要。オペレーター、技術者、エンジニアが平易な言葉で信頼できる回答を、出典付きで取得。",
+        },
+        {
+          tag: "音声操作",
+          title: "ハンズフリー。入力不要。",
+          body: "技術者が音声で修理を報告。KobiKanが構造化されたログブックエントリを自動作成 — キーボードに触れずに。",
+        },
+        {
+          tag: "ナレッジログブック",
+          title: "定年を迎えない組織の記憶。",
+          body: "チームのベストプラクティスを捉え、共有知識に変換。新入り技術者の立ち上がりを加速、ベテランの知見を残す。",
+        },
+        {
+          tag: "統合",
+          title: "既存システムと接続。",
+          body: "ドキュメント、回路図、I/Oリスト、PLCプログラム、MES、SQL、ERP、チーム知識。新しいハードウェア不要。ツールの置き換え不要。",
+        },
+        {
+          tag: "リアルタイムダッシュボード",
+          title: "完全な可視性。1つの画面。",
+          body: "機械状態、インシデント履歴、MTTR、MTTB、シフトとチームの優先タスク。迅速なデータが必要なメンテナンスマネージャー向け。",
+        },
+      ],
+    },
+    who: {
+      headline: "知識がボトルネックになる工場のために。",
+      items: [
+        "非標準化プロセスを持つ製造工場",
+        "高い離職率やベテラン技術者の定年に直面するチーム",
+        "生産とメンテナンスを1つのシステムに統合したい企業",
+      ],
+      closing:
+        "Teamsの散在メッセージ、Excel、暗黙知に頼っているチーム — KobiKanはあなたのために作られました。",
+    },
+    how: {
+      label: "初回ミーティングから稼働システムまで",
+      headline: "2週間でパイロット。リスクなし。",
+      steps: [
+        {
+          n: "01",
+          title: "紹介デモ",
+          body: "自社データでKobiKanを実演し、パイロット範囲を一緒に決定。",
+        },
+        {
+          n: "02",
+          title: "パイロット（14日未満）",
+          body: "実機とドキュメント上でアシスタントの初版を稼働。",
+        },
+        { n: "03", title: "全社展開", body: "全拠点へ拡大 — 1プラットフォーム、すべての現場。" },
+        { n: "04", title: "完全コンプライアンス", body: "セキュリティ、IT、規制基準に準拠。" },
+      ],
+      cta: "デモを予約",
+    },
+    diff: {
+      headline: "単なるチャットボットではない。産業現場のために構築。",
+      cols: { kobikan: "KobiKan", others: "他社" },
+      rows: [
+        { label: "ドキュメント + PLCコード + プロセスデータを読み取り", k: "✓", o: "✓" },
+        { label: "オンプレミス導入オプション", k: "✓", o: "—" },
+        { label: "2週間以内のパイロット", k: "✓", o: "✓" },
+        { label: "チーム知識の捕捉（ログブック）", k: "✓", o: "—" },
+        { label: "現場向け音声操作", k: "✓", o: "—" },
+        { label: "Webアプリ + ハードウェア込み", k: "✓", o: "—" },
+      ],
+    },
+    deploy: {
+      headline: "成長に合わせて拡張する導入。",
+      cards: [
+        {
+          title: "フルクラウド",
+          body: "最速の立ち上げ、最低コスト。データはスロバキア/EUに保存。",
+        },
+        {
+          title: "オンプレ + AIクラウド",
+          body: "コアとデータは工場内。AIはクラウド。大多数のエンタープライズ向け。",
+          tag: "最も人気",
+        },
+        { title: "フルオンプレ", body: "最大のデータ管理。特別なセキュリティ要件向け。" },
+      ],
+      note: "GDPR準拠。オンプレ選択時、データはインフラから出ません。",
+    },
+    trust: {
+      headline: "信頼できるセキュリティ",
+      badges: ["GDPR準拠", "オンプレミス導入", "プライベートクラウド", "SAP / MES / SQL統合"],
+    },
+    about: {
+      label: "会社概要",
+      headline: "産業向けに特化したTouch4ITのプロジェクト。",
+      lead: "KobiKanはTouch4ITが開発 — ヘルスケア、宇宙、防衛、金融の厳しい環境向けエンタープライズプラットフォームを10年以上構築してきたスロバキアのソフトウェア企業。KobiKanは工場とメンテナンスチーム向けの特化製品として、Touch4ITのエンジニアリング経験と産業生産の現実を融合。",
+      bullets: [
+        "規制産業向けエンタープライズソフトウェア10年以上の実績。",
+        "ブラチスラバのエンジニアリングチーム、EU全体のプロジェクト。",
+        "GDPRとエンタープライズIT基準に沿ったオンプレ・クラウド導入。",
+      ],
+      clientsLabel: "Touch4ITの主要クライアント",
+      clients: [
+        "AbbVie",
+        "Coca-Cola",
+        "ESA",
+        "Eumetsat",
+        "Ferrero",
+        "Raiffeisen",
+        "Saint-Gobain",
+        "Stada",
+      ],
+      cta: "Touch4ITについて",
+    },
+    faq: {
+      label: "FAQ",
+      headline: "よくある質問。",
+      items: [
+        {
+          q: "データはどこに保存されますか？",
+          a: "フルオンプレ導入ではデータはネットワークから出ません — モデルは自社サーバーで稼働。ハイブリッドではドキュメントとプロセスデータは自社インフラに留まり、クラウドAI（EUリージョン）には匿名化された質問のみ送信。",
+        },
+        {
+          q: "パイロット期間は？",
+          a: "通常NDA署名から14日。1週目 — 3〜10台の機械のドキュメントとデータを接続。2週目 — シフト中の技術者とテストし、実効果を測定。",
+        },
+        {
+          q: "KobiKanはどのシステムと統合できますか？",
+          a: "PDFマニュアル、回路図、I/Oリスト、PLCプログラム（Siemens S7、Rockwell、Beckhoff、Mitsubishi）、MES、SCADA、SQL、SAP、ERP、CMMS。デフォルトは読み取り専用。",
+        },
+        {
+          q: "導入前にドキュメントを整理する必要がありますか？",
+          a: "いいえ。KobiKanは不完全なドキュメントにも対応。既存資料でパイロットを開始し、実際に使われる部分のみ整理することを推奨。",
+        },
+        {
+          q: "KobiKanの開発元は？",
+          a: "KobiKanはTouch4ITの製品 — ヘルスケア、宇宙、防衛、金融向けエンタープライズプラットフォームを10年以上構築してきたスロバキアのテクノロジー企業。",
+        },
+        {
+          q: "費用は？",
+          a: "パイロットは事前合意の固定価格。パイロット後は機械数/ユーザー数に基づく年間ライセンス。初回コンサルテーション後に具体的な見積もり。",
+        },
+      ],
+    },
+    finalCta: {
+      headline: "自社の機械で実演します。",
+      sub: "無料相談。パイロット中に結果を確認。",
+      stats: [
+        { v: "14日未満", l: "ドキュメントから稼働パイロットまで" },
+        { v: "100%", l: "データは自社ネットワーク内に留まる" },
+        { v: "1:1", l: "チームとの個別相談" },
+      ],
+      cta: "デモを予約",
+      secondary: "または直接お問い合わせ",
+    },
+    form: {
+      title: "デモを予約",
+      name: "お名前",
+      company: "会社名",
+      email: "メール",
+      phone: "電話",
+      message: "メッセージ",
+      submit: "送信",
+      success: "ありがとうございます。24時間以内にご連絡します。",
+    },
+    footer: { rights: "All rights reserved.", powered: "Powered by Touch4IT" },
+    mockups: {
+      heroChat: {
+        header: "kobikan.app / line-7",
+        q1: "CNCライン7でエラーE-417。どうすれば？",
+        a1: "E-417 = スピンドル過負荷。冷却と圧力（≥ 4.2 bar）を確認。73%のケースでフィルターF-22の交換で解決。",
+        source: "出典: manual_cnc_v3.pdf · p. 142 · logbook #1847",
+        q2: "フィルターのSKUは？",
+        a2: "F-22-A · 在庫4個 · 棚 B3-04",
+      },
+      features: {
+        chatHeader: "chat · ライン7",
+        chatQ: "F-22の圧力設定は？",
+        chatA: "4.2〜4.8 bar。4.0 bar未満でライン停止。",
+        chatSource: "→ manual_cnc_v3.pdf p.142",
+        voiceTranscript: "「F-22フィルターを交換、圧力4.5 barに復旧。」",
+        voiceSuccess: "✓ 記録 #1848 作成",
+        logbookHeader: "logbook · CNC-07",
+        logbookRows: [
+          { id: "#1847", title: "Spindle overload", who: "J. Mráz" },
+          { id: "#1812", title: "Coolant leak", who: "P. Novák" },
+          { id: "#1798", title: "Sensor calibrate", who: "T. Kováč" },
+        ],
+        integrations: [
+          "ドキュメント",
+          "PLCプログラム",
+          "MES / SQL",
+          "ERP / SAP",
+          "回路図",
+          "Logbook",
+        ],
+        alerts: [
+          { text: "CNC-07 alarm E-417", priority: "P1" },
+          { text: "Press-02 service due", priority: "P2" },
+        ],
+      },
+    },
   },
 };

@@ -14,16 +14,17 @@ const YEAR = 2026;
 
 const SITE_URL = "https://demo-to-web.lovable.app";
 
-// FAQ JSON-LD built from i18n SK dict so it stays in sync with rendered copy.
-const FAQ_JSONLD = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: T.sk.faq.items.map((it) => ({
-    "@type": "Question",
-    name: it.q,
-    acceptedAnswer: { "@type": "Answer", text: it.a },
-  })),
-};
+function faqJsonLd(lang: Lang) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: T[lang].faq.items.map((it) => ({
+      "@type": "Question",
+      name: it.q,
+      acceptedAnswer: { "@type": "Answer", text: it.a },
+    })),
+  };
+}
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -46,11 +47,13 @@ export const Route = createFileRoute("/")({
       { property: "og:site_name", content: "KobiKan" },
       { property: "og:locale", content: "sk_SK" },
       { property: "og:locale:alternate", content: "en_US" },
+      { property: "og:locale:alternate", content: "ja_JP" },
     ],
     links: [
       { rel: "canonical", href: `${SITE_URL}/` },
       { rel: "alternate", hrefLang: "sk", href: `${SITE_URL}/` },
       { rel: "alternate", hrefLang: "en", href: `${SITE_URL}/` },
+      { rel: "alternate", hrefLang: "ja", href: `${SITE_URL}/` },
       { rel: "alternate", hrefLang: "x-default", href: `${SITE_URL}/` },
     ],
     scripts: [
@@ -81,7 +84,7 @@ export const Route = createFileRoute("/")({
       },
       {
         type: "application/ld+json",
-        children: JSON.stringify(FAQ_JSONLD),
+        children: JSON.stringify(faqJsonLd("sk")),
       },
     ],
   }),
@@ -93,6 +96,28 @@ function Landing() {
   const t = T[lang];
 
   const openModal = () => setOpen(true);
+
+  useEffect(() => {
+    document.documentElement.lang = lang === "sk" ? "sk" : lang === "ja" ? "ja" : "en";
+    document.title = t.meta.title;
+
+    let desc = document.querySelector('meta[name="description"]');
+    if (!desc) {
+      desc = document.createElement("meta");
+      desc.setAttribute("name", "description");
+      document.head.appendChild(desc);
+    }
+    desc.setAttribute("content", t.meta.description);
+
+    let faqScript = document.getElementById("faq-jsonld") as HTMLScriptElement | null;
+    if (!faqScript) {
+      faqScript = document.createElement("script");
+      faqScript.id = "faq-jsonld";
+      faqScript.type = "application/ld+json";
+      document.head.appendChild(faqScript);
+    }
+    faqScript.textContent = JSON.stringify(faqJsonLd(lang));
+  }, [lang, t.meta.title, t.meta.description]);
 
   return (
     <div className="min-h-screen bg-white text-[color:var(--color-dark)]">
@@ -118,9 +143,7 @@ function Landing() {
 
 /* ---------- Logo ---------- */
 function Logo({ className = "" }: { className?: string }) {
-  return (
-    <img src="/kobikan-logo.svg" alt="KobiKan" className={`h-8 w-auto ${className}`} />
-  );
+  return <img src="/kobikan-logo.svg" alt="KobiKan" className={`h-8 w-auto ${className}`} />;
 }
 
 /* ---------- Nav ---------- */
@@ -190,6 +213,13 @@ function Nav({
               className={`px-1.5 py-0.5 ${lang === "en" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
             >
               EN
+            </button>
+            <span className="text-[color:var(--color-neutral-gray)]">|</span>
+            <button
+              onClick={() => setLang("ja")}
+              className={`px-1.5 py-0.5 ${lang === "ja" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
+            >
+              JP
             </button>
           </div>
           <CtaButton onClick={onCta} size="sm">
@@ -265,7 +295,7 @@ function Hero({ t, onCta }: { t: typeof T.sk; onCta: () => void }) {
             </div>
           </div>
           <div className="lg:col-span-5">
-            <HeroMock />
+            <HeroMock mockups={t.mockups.heroChat} />
           </div>
         </div>
 
@@ -288,7 +318,7 @@ function Hero({ t, onCta }: { t: typeof T.sk; onCta: () => void }) {
   );
 }
 
-function HeroMock() {
+function HeroMock({ mockups }: { mockups: typeof T.sk.mockups.heroChat }) {
   return (
     <div className="relative">
       <div className="absolute -inset-4 bg-[color:var(--color-brand)]/20 blur-3xl rounded-full opacity-40" />
@@ -297,41 +327,36 @@ function HeroMock() {
           <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
           <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
           <span className="h-2.5 w-2.5 rounded-full bg-white/20" />
-          <span className="ml-3 text-xs text-white/40 font-mono">kobikan.app / line-7</span>
+          <span className="ml-3 text-xs text-white/40 font-mono">{mockups.header}</span>
         </div>
         <div className="p-5 space-y-3 text-sm">
           <div className="flex gap-3">
             <span className="h-7 w-7 shrink-0 rounded-full bg-white/10 grid place-items-center text-[10px] text-white/70">
               JM
             </span>
-            <div className="rounded-lg bg-white/5 px-3 py-2 text-white/90">
-              Error E-417 na CNC linke 7. Čo robím?
-            </div>
+            <div className="rounded-lg bg-white/5 px-3 py-2 text-white/90">{mockups.q1}</div>
           </div>
           <div className="flex gap-3">
             <span className="h-7 w-7 shrink-0 rounded-full bg-[color:var(--color-brand)] grid place-items-center text-[10px] font-bold">
               K
             </span>
             <div className="rounded-lg bg-white/10 px-3 py-2 text-white/95">
-              E-417 = spindle overload. Skontrolujte chladenie a tlak (≥ 4,2 bar). V 73 % prípadov
-              stačí výmena filtra F-22.
-              <div className="mt-2 text-[11px] text-white/50">
-                Zdroj: manual_cnc_v3.pdf · str. 142 · logbook #1847
-              </div>
+              {mockups.a1}
+              <div className="mt-2 text-[11px] text-white/50">{mockups.source}</div>
             </div>
           </div>
           <div className="flex gap-3">
             <span className="h-7 w-7 shrink-0 rounded-full bg-white/10 grid place-items-center text-[10px] text-white/70">
               JM
             </span>
-            <div className="rounded-lg bg-white/5 px-3 py-2 text-white/90">Aký je SKU filtra?</div>
+            <div className="rounded-lg bg-white/5 px-3 py-2 text-white/90">{mockups.q2}</div>
           </div>
           <div className="flex gap-3">
             <span className="h-7 w-7 shrink-0 rounded-full bg-[color:var(--color-brand)] grid place-items-center text-[10px] font-bold">
               K
             </span>
             <div className="rounded-lg bg-white/10 px-3 py-2 text-white/95 font-mono text-[13px]">
-              F-22-A · 4 ks na sklade · regál B3-04
+              {mockups.a2}
             </div>
           </div>
         </div>
@@ -426,7 +451,7 @@ function Features({ t }: { t: typeof T.sk }) {
                     {f.body}
                   </p>
                 </div>
-                <FeatureMock index={i} />
+                <FeatureMock index={i} mockups={t.mockups.features} />
               </div>
             );
           })}
@@ -436,7 +461,7 @@ function Features({ t }: { t: typeof T.sk }) {
   );
 }
 
-function FeatureMock({ index }: { index: number }) {
+function FeatureMock({ index, mockups }: { index: number; mockups: typeof T.sk.mockups.features }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const base =
     "rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-dark)] text-white overflow-hidden shadow-xl";
@@ -546,15 +571,13 @@ function FeatureMock({ index }: { index: number }) {
     return (
       <div ref={containerRef} className={base}>
         <div className="px-4 py-3 border-b border-white/10 text-xs text-white/40 font-mono">
-          chat · línia 7
+          {mockups.chatHeader}
         </div>
         <div className="p-5 space-y-3 text-sm">
-          <div className="chat-msg rounded-md bg-white/5 px-3 py-2">
-            Aké je nastavenie tlaku pre F-22?
-          </div>
+          <div className="chat-msg rounded-md bg-white/5 px-3 py-2">{mockups.chatQ}</div>
           <div className="chat-msg rounded-md bg-[color:var(--color-brand)]/15 border border-[color:var(--color-brand)]/30 px-3 py-2">
-            4,2–4,8 bar. Pri poklese pod 4,0 bar zastaviť linku.
-            <div className="text-[11px] text-white/40 mt-1">→ manual_cnc_v3.pdf p.142</div>
+            {mockups.chatA}
+            <div className="text-[11px] text-white/40 mt-1">{mockups.chatSource}</div>
           </div>
         </div>
       </div>
@@ -567,11 +590,9 @@ function FeatureMock({ index }: { index: number }) {
           <div className="h-10 w-10 rounded-full bg-[color:var(--color-brand)] relative z-10" />
         </div>
         <p className="mt-5 text-sm text-white/70 font-mono">▮▮▮▮▮▮▮▯▯▯ 0:14</p>
-        <p className="voice-text mt-3 text-white/90">
-          "Vymenil som filter F-22, tlak je späť na 4,5 bar."
-        </p>
+        <p className="voice-text mt-3 text-white/90">{mockups.voiceTranscript}</p>
         <p className="voice-success mt-3 text-xs text-[color:var(--color-brand)]">
-          ✓ Záznam #1848 vytvorený
+          {mockups.voiceSuccess}
         </p>
       </div>
     );
@@ -579,14 +600,10 @@ function FeatureMock({ index }: { index: number }) {
     return (
       <div ref={containerRef} className={base}>
         <div className="px-4 py-3 border-b border-white/10 text-xs text-white/40 font-mono">
-          logbook · CNC-07
+          {mockups.logbookHeader}
         </div>
         <div className="divide-y divide-white/10 text-sm">
-          {[
-            ["#1847", "Spindle overload", "J. Mráz"],
-            ["#1812", "Coolant leak", "P. Novák"],
-            ["#1798", "Sensor calibrate", "T. Kováč"],
-          ].map(([id, title, who]) => (
+          {mockups.logbookRows.map(({ id, title, who }) => (
             <div key={id} className="logbook-entry px-4 py-3 flex justify-between">
               <span className="font-mono text-white/50">{id}</span>
               <span className="text-white/90 flex-1 px-3">{title}</span>
@@ -600,7 +617,7 @@ function FeatureMock({ index }: { index: number }) {
     return (
       <div ref={containerRef} className={base + " p-6"}>
         <div className="grid grid-cols-2 gap-3 text-xs">
-          {["Dokumenty", "PLC programy", "MES / SQL", "ERP / SAP", "Schémy", "Logbook"].map((x) => (
+          {mockups.integrations.map((x) => (
             <div
               key={x}
               className="integration-item rounded-md border border-white/10 bg-white/5 px-3 py-3 flex items-center justify-between"
@@ -630,14 +647,18 @@ function FeatureMock({ index }: { index: number }) {
         <div className="dash-chart absolute inset-y-0 left-0 bg-gradient-to-r from-[color:var(--color-brand)]/30 to-transparent" />
       </div>
       <div className="mt-3 space-y-1.5 text-xs text-white/70">
-        <div className="dash-alert flex justify-between">
-          <span>CNC-07 alarm E-417</span>
-          <span className="text-[color:var(--color-brand)]">P1</span>
-        </div>
-        <div className="dash-alert flex justify-between">
-          <span>Press-02 service due</span>
-          <span className="text-amber-400">P2</span>
-        </div>
+        {mockups.alerts.map((alert) => (
+          <div key={alert.text} className="dash-alert flex justify-between">
+            <span>{alert.text}</span>
+            <span
+              className={
+                alert.priority === "P1" ? "text-[color:var(--color-brand)]" : "text-amber-400"
+              }
+            >
+              {alert.priority}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
