@@ -1,4 +1,4 @@
-export type Lang = "sk" | "en" | "ja";
+export type Lang = "sk" | "en" | "ja" | "de" | "cs";
 
 export type Dict = {
   meta: { title: string; description: string; orgDescription: string };
@@ -78,9 +78,12 @@ export type Dict = {
     phone: string;
     message: string;
     submit: string;
+    submitting: string;
     success: string;
+    error: string;
   };
   footer: { rights: string; powered: string };
+  cookie: { msg: string; accept: string; reject: string };
   mockups: {
     heroChat: {
       header: string;
@@ -148,7 +151,7 @@ export const T: Record<Lang, Dict> = {
         },
         {
           title: "AI asistent pre každého technika",
-          body: "Inteligentný kolega, ktorý pozná vašu prevádzku — manuály, históriu porúch aj postupy seniorov. Navádza krok po kroku pri diagnostike, navrhuje riešenia overené na vašich vlastných dátach a učí sa z každého vyriešeného prípadu. Dostupný 24/7, v slovenčine aj angličtine.",
+          body: "Inteligentný kolega, ktorý pozná vašu prevádzku — manuály, históriu porúch aj postupy seniorov. Navádza krok po kroku pri diagnostike, navrhuje riešenia overené na vašich vlastných dátach a učí sa z každého vyriešeného prípadu. Dostupný 24/7 v slovenčine, češtine, nemčine, angličtine a japončine.",
         },
       ],
       closing: "Tri piliere. Jedna platforma. Okamžitý dopad.",
@@ -342,9 +345,16 @@ export const T: Record<Lang, Dict> = {
       phone: "Telefón",
       message: "Správa",
       submit: "Odoslať",
+      submitting: "Odosielam…",
       success: "Ďakujeme, ozveme sa do 24 hodín.",
+      error: "Niečo sa pokazilo. Skúste to znova alebo nás kontaktujte priamo.",
     },
     footer: { rights: "Všetky práva vyhradené.", powered: "Powered by Touch4IT" },
+    cookie: {
+      msg: "Používame iba nevyhnutné cookies a anonymné meranie návštevnosti. Bez nich web nefunguje korektne.",
+      accept: "Súhlasím",
+      reject: "Len nevyhnutné",
+    },
     mockups: {
       heroChat: {
         header: "kobikan.app / line-7",
@@ -417,7 +427,7 @@ export const T: Record<Lang, Dict> = {
         },
         {
           title: "AI assistant for every technician",
-          body: "A smart colleague that knows your operation — manuals, failure history and the know-how of senior staff. Walks the team through diagnostics step by step, proposes solutions validated on your own data, and learns from every resolved case. Available 24/7, in English and Slovak.",
+          body: "A smart colleague that knows your operation — manuals, failure history and the know-how of senior staff. Walks the team through diagnostics step by step, proposes solutions validated on your own data, and learns from every resolved case. Available 24/7 in English, German, Czech, Japanese, and Slovak.",
         },
       ],
       closing: "Three pillars. One platform. Immediate impact.",
@@ -559,7 +569,9 @@ export const T: Record<Lang, Dict> = {
       phone: "Phone",
       message: "Message",
       submit: "Send",
+      submitting: "Sending…",
       success: "Thanks — we'll be in touch within 24 hours.",
+      error: "Something went wrong. Please try again or contact us directly.",
     },
     about: {
       label: "About",
@@ -614,6 +626,11 @@ export const T: Record<Lang, Dict> = {
       ],
     },
     footer: { rights: "All rights reserved.", powered: "Powered by Touch4IT" },
+    cookie: {
+      msg: "We only use essential cookies and anonymous analytics. They are required for the site to work properly.",
+      accept: "Accept",
+      reject: "Essential only",
+    },
     mockups: {
       heroChat: {
         header: "kobikan.app / line-7",
@@ -693,7 +710,7 @@ export const T: Record<Lang, Dict> = {
         },
         {
           title: "すべての技術者向けAIアシスタント",
-          body: "現場を知るスマートな同僚 — マニュアル、故障履歴、ベテランのノウハウ。診断をステップごとに案内し、自社データで検証された解決策を提案。解決するたびに学習。24時間365日、日本語・英語・スロバキア語対応。",
+          body: "現場を知るスマートな同僚 — マニュアル、故障履歴、ベテランのノウハウ。診断をステップごとに案内し、自社データで検証された解決策を提案。解決するたびに学習。24時間365日、日本語・英語・ドイツ語・チェコ語・スロバキア語対応。",
         },
       ],
       closing: "3つの柱。1つのプラットフォーム。即座の効果。",
@@ -871,9 +888,16 @@ export const T: Record<Lang, Dict> = {
       phone: "電話",
       message: "メッセージ",
       submit: "送信",
+      submitting: "送信中…",
       success: "ありがとうございます。24時間以内にご連絡します。",
+      error: "送信に失敗しました。再度お試しいただくか、直接お問い合わせください。",
     },
     footer: { rights: "All rights reserved.", powered: "Powered by Touch4IT" },
+    cookie: {
+      msg: "必須Cookieと匿名のアクセス解析のみを使用します。これらがないとサイトが正しく動作しません。",
+      accept: "同意する",
+      reject: "必須のみ",
+    },
     mockups: {
       heroChat: {
         header: "kobikan.app / line-7",
@@ -907,6 +931,579 @@ export const T: Record<Lang, Dict> = {
         alerts: [
           { text: "CNC-07 alarm E-417", priority: "P1" },
           { text: "Press-02 service due", priority: "P2" },
+        ],
+      },
+    },
+  },
+  de: {
+    meta: {
+      title: "KobiKan — KI-Wartungsassistent für industrielle Betriebe",
+      description:
+        "KobiKan erfasst das Wissen Ihres Betriebs und liefert sofortige Antworten für jeden Techniker. Pilot in 14 Tagen. On-Prem oder Cloud. Ein Touch4IT-Projekt.",
+      orgDescription: "KI-Wartungsassistent für industrielle Betriebe.",
+    },
+    nav: {
+      features: "Funktionen",
+      how: "So funktioniert's",
+      why: "Warum KobiKan",
+      deployment: "Bereitstellung",
+      contact: "Kontakt",
+      about: "Über uns",
+      faq: "FAQ",
+      cta: "Demo buchen",
+    },
+    hero: {
+      eyebrow: "KI-Wartungsassistent",
+      h1a: "Ihr bester Techniker ist in Rente gegangen.",
+      h1b: "KobiKan nicht.",
+      sub: "KobiKan erfasst das Wissen Ihres Betriebs und liefert sofortige Antworten — für jeden Techniker, jede Schicht, jede Maschine.",
+      cta: "Demo buchen",
+      secondary: "So funktioniert's",
+      stat1: "erfahrene Techniker gehen in 5–10 Jahren in Rente",
+      stat2: "Stunden pro Woche gehen für die Suche nach Informationen verloren",
+      stat3: "der Ausfälle entstehen durch fehlende Informationen",
+    },
+    problem: {
+      label: "Lösung",
+      headline: "Eine Plattform für Wissen, Daten und Wartung.",
+      items: [
+        {
+          title: "Einheitlicher Zugang zu Daten und Kommunikation",
+          body: "Wir verbinden SAP, MES, CMMS, technische Handbücher, Schaltpläne, I/O-Listen und SPS-Programme an einem Ort. Techniker fragen in natürlicher Sprache über die vertraute Chat-Oberfläche — KobiKan findet die Antwort systemübergreifend und zeigt stets die Quelle. Im selben Interface tauschen sich Techniker aus, übergeben Schichten und teilen Verfahren — die gesamte Teamkommunikation bleibt an einem Ort und wird Teil der Wissensbasis.",
+        },
+        {
+          title: "Digitalisierte Wartungsprotokolle",
+          body: "Schluss mit Papierlogbüchern und verstreuten Tabellen. Reparatur-, Inspektions- und Störungsberichte werden per Sprache erfasst oder strukturiert dokumentiert — ein einheitliches Format über Schichten, Maschinen und Standorte hinweg. Daten sind sofort nutzbar für Analysen, MTTR/MTBF und vorausschauende Wartung.",
+        },
+        {
+          title: "KI-Assistent für jeden Techniker",
+          body: "Ein intelligenter Kollege, der Ihren Betrieb kennt — Handbücher, Störungshistorie und das Know-how erfahrener Mitarbeiter. Führt Schritt für Schritt durch die Diagnose, schlägt Lösungen vor, die an Ihren eigenen Daten validiert sind, und lernt aus jedem gelösten Fall. Verfügbar 24/7 auf Deutsch, Englisch, Tschechisch, Japanisch und Slowakisch.",
+        },
+      ],
+      closing: "Drei Säulen. Eine Plattform. Sofortige Wirkung.",
+    },
+    intro: {
+      label: "KobiKan im Überblick",
+      headline: "Ihr digitaler Kollege. Rund um die Uhr verfügbar.",
+      items: [
+        { title: "Versteht", body: "Handbücher, SPS-Code, Serviceprotokolle und Teamexpertise." },
+        {
+          title: "Antwortet",
+          body: "Sofort, präzise, in der Sprache des Technikers, mit Quellenangaben.",
+        },
+        {
+          title: "Integriert",
+          body: "Funktioniert mit Ihren bestehenden Systemen. Kein Ersatz nötig.",
+        },
+        { title: "Lernt", body: "Jeder gelöste Fall macht das System schlauer." },
+      ],
+    },
+    features: {
+      eyebrow: "Kernfunktionen",
+      headline: "Für den täglichen Betrieb gebaut.",
+      list: [
+        {
+          tag: "Konversationelle KI",
+          title: "Fragen Sie alles. Antwort in Sekunden.",
+          body: "Intuitive Oberfläche — keine Schulung nötig. Bediener, Techniker und Ingenieure erhalten verlässliche Antworten in verständlicher Sprache, mit Quellenangaben.",
+        },
+        {
+          tag: "Sprachsteuerung",
+          title: "Freihändig. Ohne Tippen.",
+          body: "Techniker melden Reparaturen per Sprache. KobiKan erstellt automatisch einen strukturierten Logbucheintrag — ohne Tastatur.",
+        },
+        {
+          tag: "Wissens-Logbuch",
+          title: "Institutionelles Gedächtnis, das nicht in Rente geht.",
+          body: "Wir erfassen die Best Practices Ihres Teams und machen sie zu geteiltem Wissen. Neue Techniker starten schneller, das Know-how erfahrener Kollegen bleibt verfügbar.",
+        },
+        {
+          tag: "Integrationen",
+          title: "Anbindung an Ihre bestehenden Systeme.",
+          body: "Dokumente, Schaltpläne, I/O-Listen, SPS-Programme, MES, SQL, ERP, Teamwissen. Keine neue Hardware. Kein Toolwechsel.",
+        },
+        {
+          tag: "Echtzeit-Dashboard",
+          title: "Voller Überblick. Ein Bildschirm.",
+          body: "Maschinenstatus, Störungshistorie, MTTR, MTTB, Prioritätsaufgaben für Schichten und Teams. Für Wartungsleiter, die schnell echte Daten brauchen.",
+        },
+      ],
+    },
+    who: {
+      headline: "Für Betriebe, in denen Wissen der Engpass ist.",
+      items: [
+        "Fertigungsbetriebe mit nicht standardisierten Prozessen",
+        "Teams mit hoher Fluktuation oder dem Ausscheiden erfahrener Mitarbeiter",
+        "Unternehmen, die Produktion und Wartung verbinden wollen",
+      ],
+      closing:
+        "Wenn Ihr Team noch auf verstreute Teams-Nachrichten, Excel-Tabellen und implizites Wissen angewiesen ist — KobiKan ist für Sie gemacht.",
+    },
+    how: {
+      label: "Vom ersten Gespräch bis zum Live-System",
+      headline: "Pilot in 2 Wochen. Ohne Risiko.",
+      steps: [
+        {
+          n: "01",
+          title: "Einführungsdemo",
+          body: "Wir zeigen KobiKan an Ihren eigenen Daten und definieren gemeinsam den Pilotumfang.",
+        },
+        {
+          n: "02",
+          title: "Pilot (< 14 Tage)",
+          body: "Erste Version des Assistenten live an Ihren echten Maschinen und Dokumentation.",
+        },
+        {
+          n: "03",
+          title: "Unternehmensweite Einführung",
+          body: "Ausweitung auf das gesamte Unternehmen — eine Plattform, alle Standorte.",
+        },
+        {
+          n: "04",
+          title: "Volle Compliance",
+          body: "Konform mit Ihren Sicherheits-, IT- und Regulierungsanforderungen.",
+        },
+      ],
+      cta: "Demo buchen",
+    },
+    diff: {
+      headline: "Nicht nur ein weiterer Chatbot. Für die Industrie gebaut.",
+      cols: { kobikan: "KobiKan", others: "Andere Anbieter" },
+      rows: [
+        { label: "Liest Dokumente + SPS-Code + Prozessdaten", k: "✓", o: "✓" },
+        { label: "On-Premise-Bereitstellung", k: "✓", o: "—" },
+        { label: "Pilot innerhalb von 2 Wochen", k: "✓", o: "✓" },
+        { label: "Erfassung von Teamwissen (Logbuch)", k: "✓", o: "—" },
+        { label: "Sprachsteuerung im Feld", k: "✓", o: "—" },
+        { label: "Web-App + Hardware inklusive", k: "✓", o: "—" },
+      ],
+    },
+    deploy: {
+      headline: "Bereitstellung, die mit Ihnen wächst.",
+      cards: [
+        {
+          title: "Full Cloud",
+          body: "Schnellster Start, niedrigste Kosten. Daten in der Slowakei/EU gespeichert.",
+        },
+        {
+          title: "On-Prem + KI-Cloud",
+          body: "Kern und Daten in Ihrer Fabrik. KI in der Cloud. Ideal für die meisten Unternehmen.",
+          tag: "Am beliebtesten",
+        },
+        {
+          title: "Full On-Prem",
+          body: "Maximale Datenkontrolle. Für besondere Anforderungen an Unternehmenssicherheit.",
+        },
+      ],
+      note: "DSGVO-konform. Bei On-Prem verlassen Ihre Daten nie Ihre Infrastruktur.",
+    },
+    trust: {
+      headline: "Sicherheit, der Sie vertrauen können",
+      badges: [
+        "DSGVO-konform",
+        "On-Premise-Bereitstellung",
+        "Private Cloud",
+        "SAP / MES / SQL-Integration",
+      ],
+    },
+    about: {
+      label: "Über uns",
+      headline: "Ein Touch4IT-Projekt mit Fokus auf Industrie.",
+      lead: "KobiKan wird von Touch4IT entwickelt — einem slowakischen Softwareunternehmen mit über 10 Jahren Erfahrung in Enterprise-Plattformen für anspruchsvolle Umgebungen in Gesundheitswesen, Raumfahrt, Verteidigung und Finanzen. KobiKan ist ein spezialisiertes Produkt für Werke und Wartungsteams und verbindet Touch4ITs Engineering-Know-how mit der Realität industrieller Produktion.",
+      bullets: [
+        "10+ Jahre Enterprise-Software in regulierten Branchen.",
+        "Engineering-Teams in Bratislava, Projekte in der gesamten EU.",
+        "On-Prem- und Cloud-Bereitstellungen gemäß DSGVO und IT-Standards.",
+      ],
+      clientsLabel: "Touch4IT arbeitet mit",
+      clients: [
+        "AbbVie",
+        "Coca-Cola",
+        "ESA",
+        "Eumetsat",
+        "Ferrero",
+        "Raiffeisen",
+        "Saint-Gobain",
+        "Stada",
+      ],
+      cta: "Mehr über Touch4IT",
+    },
+    faq: {
+      label: "FAQ",
+      headline: "Häufig gestellte Fragen.",
+      items: [
+        {
+          q: "Wo werden unsere Daten gespeichert?",
+          a: "Bei vollständiger On-Prem-Bereitstellung verlassen Ihre Daten nie Ihr Netzwerk — das Modell läuft auf Ihren Servern. Im Hybridmodus bleiben Dokumente und Prozessdaten in Ihrer Infrastruktur; nur anonymisierte Fragen gehen an die KI in der Cloud (EU-Regionen).",
+        },
+        {
+          q: "Wie lange dauert der Pilot?",
+          a: "In der Regel 14 Tage ab NDA. Woche 1 — Anbindung von Dokumentation und Daten von 3–10 Maschinen. Woche 2 — Tests mit Technikern im Schichtbetrieb und Messung des realen Nutzens.",
+        },
+        {
+          q: "Mit welchen Systemen integriert sich KobiKan?",
+          a: "PDF-Handbücher, Schaltpläne, I/O-Listen, SPS-Programme (Siemens S7, Rockwell, Beckhoff, Mitsubishi), MES, SCADA, SQL, SAP, ERP und CMMS. Standardmäßig nur Lesezugriff.",
+        },
+        {
+          q: "Müssen wir die Dokumentation vorher bereinigen?",
+          a: "Nein. KobiKan kommt auch mit unvollständiger Dokumentation zurecht. Wir empfehlen, den Pilot mit vorhandenen Materialien zu starten und nur das zu bereinigen, was tatsächlich genutzt wird.",
+        },
+        {
+          q: "Wer entwickelt KobiKan?",
+          a: "KobiKan ist ein Produkt von Touch4IT — einem slowakischen Softwareunternehmen mit über 10 Jahren Erfahrung in Enterprise-Plattformen für Gesundheitswesen, Raumfahrt, Verteidigung und Finanzen.",
+        },
+        {
+          q: "Was kostet es?",
+          a: "Der Pilot hat einen fest vereinbarten Preis. Danach folgt eine Jahreslizenz nach Anzahl der Maschinen / Nutzer. Ein konkretes Angebot erhalten Sie nach dem Erstgespräch.",
+        },
+      ],
+    },
+    finalCta: {
+      headline: "Wir zeigen es an Ihren eigenen Maschinen.",
+      sub: "Unverbindliche Beratung. Ergebnisse bereits im Pilot sichtbar.",
+      stats: [
+        { v: "< 14 Tage", l: "Von der Dokumentation zum funktionierenden Pilot" },
+        { v: "100 %", l: "Ihre Daten bleiben in Ihrem Netzwerk" },
+        { v: "1:1", l: "Beratung mit unserem Team" },
+      ],
+      cta: "Demo buchen",
+      secondary: "Oder kontaktieren Sie uns direkt",
+    },
+    form: {
+      title: "Demo buchen",
+      name: "Name",
+      company: "Unternehmen",
+      email: "E-Mail",
+      phone: "Telefon",
+      message: "Nachricht",
+      submit: "Senden",
+      submitting: "Wird gesendet…",
+      success: "Vielen Dank — wir melden uns innerhalb von 24 Stunden.",
+      error:
+        "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
+    },
+    footer: { rights: "Alle Rechte vorbehalten.", powered: "Powered by Touch4IT" },
+    cookie: {
+      msg: "Wir verwenden nur notwendige Cookies und anonyme Nutzungsstatistiken. Ohne sie funktioniert die Website nicht ordnungsgemäß.",
+      accept: "Akzeptieren",
+      reject: "Nur notwendige",
+    },
+    mockups: {
+      heroChat: {
+        header: "kobikan.app / line-7",
+        q1: "Fehler E-417 an CNC-Linie 7. Was tun?",
+        a1: "E-417 = Spindelüberlast. Kühlung und Druck prüfen (≥ 4,2 bar). In 73 % der Fälle reicht der Filterwechsel F-22.",
+        source: "Quelle: manual_cnc_v3.pdf · S. 142 · Logbuch #1847",
+        q2: "Welche SKU hat der Filter?",
+        a2: "F-22-A · 4 auf Lager · Regal B3-04",
+      },
+      features: {
+        chatHeader: "Chat · Linie 7",
+        chatQ: "Welche Druckeinstellung für F-22?",
+        chatA: "4,2–4,8 bar. Linie stoppen, wenn der Druck unter 4,0 bar fällt.",
+        chatSource: "→ manual_cnc_v3.pdf S.142",
+        voiceTranscript: '"Filter F-22 gewechselt, Druck wieder bei 4,5 bar."',
+        voiceSuccess: "✓ Eintrag #1848 erstellt",
+        logbookHeader: "Logbuch · CNC-07",
+        logbookRows: [
+          { id: "#1847", title: "Spindelüberlast", who: "J. Mráz" },
+          { id: "#1812", title: "Kühlmittelleck", who: "P. Novák" },
+          { id: "#1798", title: "Sensor kalibrieren", who: "T. Kováč" },
+        ],
+        integrations: [
+          "Dokumente",
+          "SPS-Programme",
+          "MES / SQL",
+          "ERP / SAP",
+          "Schaltpläne",
+          "Logbuch",
+        ],
+        alerts: [
+          { text: "CNC-07 Alarm E-417", priority: "P1" },
+          { text: "Press-02 Wartung fällig", priority: "P2" },
+        ],
+      },
+    },
+  },
+  cs: {
+    meta: {
+      title: "KobiKan — AI asistent údržby pro průmyslové provozy",
+      description:
+        "KobiKan zachytí znalosti vašeho provozu a promění je v okamžité odpovědi pro každého technika. Pilot za 14 dní. On-prem nebo cloud. Projekt společnosti Touch4IT.",
+      orgDescription: "AI asistent údržby pro průmyslové provozy.",
+    },
+    nav: {
+      features: "Funkce",
+      how: "Jak to funguje",
+      why: "Proč KobiKan",
+      deployment: "Nasazení",
+      contact: "Kontakt",
+      about: "O nás",
+      faq: "FAQ",
+      cta: "Naplánovat demo",
+    },
+    hero: {
+      eyebrow: "AI asistent pro údržbu",
+      h1a: "Váš nejlepší technik právě odešel do důchodu.",
+      h1b: "KobiKan ne.",
+      sub: "KobiKan zachycuje znalosti vašeho provozu a mění je v okamžité odpovědi — pro každého technika, na každé směně, u každého stroje.",
+      cta: "Naplánovat demo",
+      secondary: "Podívejte se, jak to funguje",
+      stat1: "zkušených techniků odejde do důchodu v horizontu 5–10 let",
+      stat2: "hodin týdně ztracených hledáním správné informace",
+      stat3: "poruch vzniká kvůli chybějícím informacím",
+    },
+    problem: {
+      label: "Řešení",
+      headline: "Jedna platforma pro znalosti, data a údržbu.",
+      items: [
+        {
+          title: "Jednotný přístup k datům a komunikaci",
+          body: "Propojíme SAP, MES, CMMS, technické manuály, schémata, I/O seznamy a PLC programy na jednom místě. Technik se ptá v přirozeném jazyce přes známé chatové rozhraní — KobiKan najde odpověď napříč systémy a vždy ukáže zdroj. Ve stejném rozhraní si technici píší mezi sebou, předávají směny a sdílejí postupy — celá týmová komunikace zůstává na jednom místě a stává se součástí znalostní báze.",
+        },
+        {
+          title: "Digitalizace záznamů údržby",
+          body: "Konec papírových deníků a roztroušených Excelů. Záznamy o opravách, kontrolách a incidentech se diktují hlasem nebo zapisují ve strukturované formě — jednotný formát napříč směnami, stroji a závody. Data jsou okamžitě použitelná pro analýzy, MTTR/MTBF a prediktivní údržbu.",
+        },
+        {
+          title: "AI asistent pro každého technika",
+          body: "Inteligentní kolega, který zná váš provoz — manuály, historii poruch i postupy seniorů. Navádí krok po kroku při diagnostice, navrhuje řešení ověřená na vašich vlastních datech a učí se z každého vyřešeného případu. Dostupný 24/7 v češtině, slovenštině, němčině, angličtině a japonštině.",
+        },
+      ],
+      closing: "Tři pilíře. Jedna platforma. Okamžitý dopad.",
+    },
+    intro: {
+      label: "Představujeme KobiKan",
+      headline: "Váš digitální kolega. Dostupný 24/7.",
+      items: [
+        { title: "Rozumí", body: "Manuálům, PLC kódu, servisním záznamům a zkušenostem týmu." },
+        { title: "Odpovídá", body: "Okamžitě — přesně, jazykem technika, s odkazem na zdroj." },
+        { title: "Integruje", body: "Funguje s vašimi stávajícími systémy. Bez náhrady." },
+        { title: "Učí se", body: "Každý vyřešený případ dělá systém chytřejším." },
+      ],
+    },
+    features: {
+      eyebrow: "Klíčové funkce",
+      headline: "Postaveno pro každodenní provoz.",
+      list: [
+        {
+          tag: "Konverzační AI rozhraní",
+          title: "Zeptejte se na cokoli. Odpověď za sekundy.",
+          body: "Intuitivní rozhraní bez nutnosti školení. Operátoři, technici i inženýři dostanou ověřenou odpověď srozumitelným jazykem, vždy s odkazem na zdroj.",
+        },
+        {
+          tag: "Hlasové ovládání",
+          title: "Bez rukou. Bez psaní.",
+          body: "Technik nahrává opravu hlasem. KobiKan automaticky vytvoří strukturovaný záznam do deníku — bez dotyku klávesnice.",
+        },
+        {
+          tag: "Logbook znalostí",
+          title: "Institucionální paměť, která nikdy neodejde.",
+          body: "Zachycujeme nejlepší postupy vašeho týmu a měníme je ve sdílené znalosti. Noví technici se zorientují rychleji, zkušenosti seniorů zůstanou dostupné.",
+        },
+        {
+          tag: "Integrace",
+          title: "Propojí se se systémy, které už používáte.",
+          body: "Dokumenty, schémata, I/O listy, PLC programy, MES, SQL, ERP, znalosti týmu. Žádný nový hardware, žádná náhrada nástrojů.",
+        },
+        {
+          tag: "Real-time dashboard",
+          title: "Úplný přehled. Jedna obrazovka.",
+          body: "Stav strojů, historie incidentů, MTTR, MTTB, prioritní úkoly pro směny a týmy. Pro manažery údržby, kteří potřebují skutečná data rychle.",
+        },
+      ],
+    },
+    who: {
+      headline: "Stvořeno pro závody, kde jsou znalosti úzkým hrdlem.",
+      items: [
+        "Výrobní závody s nestandardizovanými procesy",
+        "Týmy s vysokou fluktuací nebo odchodem zkušených pracovníků",
+        "Firmy, které chtějí propojit výrobu a údržbu do jednoho systému",
+      ],
+      closing:
+        "Pokud váš tým stále pracuje s roztroušenými zprávami v Teams, Excel tabulkami a nepopsanými pravidly — KobiKan je stvořen pro vás.",
+    },
+    how: {
+      label: "Od prvního setkání po živý systém",
+      headline: "Pilotní provoz za 2 týdny. Bez rizika.",
+      steps: [
+        {
+          n: "01",
+          title: "Úvodní demo",
+          body: "Ukážeme KobiKan na vašich vlastních datech a prodiskutujeme rozsah pilotu.",
+        },
+        {
+          n: "02",
+          title: "Pilot (< 14 dní)",
+          body: "První verze asistenta v provozu na vašich reálných strojích a dokumentaci.",
+        },
+        {
+          n: "03",
+          title: "Nasazení do celé firmy",
+          body: "Rozšíříme na celou společnost — jedna platforma, všechny provozy.",
+        },
+        {
+          n: "04",
+          title: "Plná shoda",
+          body: "V souladu s vašimi bezpečnostními, IT a regulačními standardy.",
+        },
+      ],
+      cta: "Naplánovat demo",
+    },
+    diff: {
+      headline: "Ne jen další chatbot. Stvořen pro průmyslovou realitu.",
+      cols: { kobikan: "KobiKan", others: "Jiní dodavatelé" },
+      rows: [
+        { label: "Čte dokumenty + PLC kód + procesní data", k: "✓", o: "✓" },
+        { label: "Nasazení na vlastní infrastruktuře (on-prem)", k: "✓", o: "—" },
+        { label: "Pilot za 2 týdny", k: "✓", o: "✓" },
+        { label: "Zachycování znalostí týmu (logbook)", k: "✓", o: "—" },
+        { label: "Hlasové ovládání v terénu", k: "✓", o: "—" },
+        { label: "Webová aplikace + hardware v ceně", k: "✓", o: "—" },
+      ],
+    },
+    deploy: {
+      headline: "Nasazení, které roste s vámi.",
+      cards: [
+        {
+          title: "Plný cloud",
+          body: "Nejrychlejší start, nejnižší náklady. Data uložená na Slovensku/v EU.",
+        },
+        {
+          title: "On-Prem + AI cloud",
+          body: "Jádro a data ve vaší továrně. AI v cloudu. Nejlepší pro většinu podniků.",
+          tag: "Nejoblíbenější",
+        },
+        {
+          title: "Plný On-Prem",
+          body: "Maximální kontrola nad daty. Pro výjimečné požadavky na podnikovou bezpečnost.",
+        },
+      ],
+      note: "V souladu s GDPR. Data neopustí vaši infrastrukturu při volbě On-Prem.",
+    },
+    trust: {
+      headline: "Bezpečnost, které můžete důvěřovat",
+      badges: [
+        "GDPR v souladu",
+        "On-Premise nasazení",
+        "Privátní cloud",
+        "SAP / MES / SQL integrace",
+      ],
+    },
+    about: {
+      label: "O nás",
+      headline: "Projekt společnosti Touch4IT se zaměřením na průmysl.",
+      lead: "KobiKan vyvíjí Touch4IT — slovenská technologická společnost, která více než 10 let staví software pro náročná prostředí ve zdravotnictví, vesmírném průmyslu, obraně a financích. KobiKan vznikl jako specializovaný produkt pro výrobní závody a údržbu, kde se setkává inženýrská zkušenost Touch4IT s realitou průmyslové výroby.",
+      bullets: [
+        "10+ let zkušeností s enterprise softwarem v regulovaných odvětvích.",
+        "Inženýrské týmy v Bratislavě, projekty po celé EU.",
+        "On-prem i cloud nasazení v souladu s GDPR a podnikovými IT standardy.",
+      ],
+      clientsLabel: "Touch4IT spolupracuje s",
+      clients: [
+        "AbbVie",
+        "Coca-Cola",
+        "ESA",
+        "Eumetsat",
+        "Ferrero",
+        "Raiffeisen",
+        "Saint-Gobain",
+        "Stada",
+      ],
+      cta: "Více o Touch4IT",
+    },
+    faq: {
+      label: "FAQ",
+      headline: "Časté otázky.",
+      items: [
+        {
+          q: "Kde jsou uložena naše data?",
+          a: "V plném on-prem nasazení neopustí data vaši síť — model běží na vašem serveru. V hybridním režimu jsou dokumenty a procesní data ve vaší infrastruktuře, do AI v cloudu (EU regiony) jdou pouze anonymizované otázky.",
+        },
+        {
+          q: "Jak dlouho trvá pilot?",
+          a: "Standardně 14 dní od podpisu NDA. Týden 1 — připojení dokumentace a dat z 3–10 strojů. Týden 2 — testování s techniky a měření reálných benefitů.",
+        },
+        {
+          q: "S jakými systémy se KobiKan integruje?",
+          a: "PDF manuály, schémata, I/O seznamy, PLC programy (Siemens S7, Rockwell, Beckhoff, Mitsubishi), MES, SCADA, SQL, SAP, ERP a CMMS. Read-only jako standard.",
+        },
+        {
+          q: "Potřebujeme upravit dokumentaci před nasazením?",
+          a: "Ne. KobiKan si poradí i s nedokonalou dokumentací. Doporučujeme spustit pilot se stávajícími materiály a čistit pouze to, co se reálně používá.",
+        },
+        {
+          q: "Kdo stojí za KobiKan?",
+          a: "KobiKan je produkt společnosti Touch4IT — slovenské technologické firmy s více než 10letou zkušeností s enterprise softwarem ve zdravotnictví, vesmíru, obraně a financích.",
+        },
+        {
+          q: "Jaké jsou náklady?",
+          a: "Pilot má fixní cenu odsouhlasenou předem. Po pilotu pokračujete na roční licenci podle počtu strojů / uživatelů. Konkrétní cenovou nabídku připravíme po první konzultaci.",
+        },
+      ],
+    },
+    finalCta: {
+      headline: "Ukážeme vám to na vašich vlastních strojích.",
+      sub: "Nezávazná konzultace. Výsledky viditelné už během pilotu.",
+      stats: [
+        { v: "< 14 dní", l: "Od dokumentace po funkční pilot" },
+        { v: "100 %", l: "Vaše data zůstávají ve vaší síti" },
+        { v: "1:1", l: "Konzultace s naším týmem" },
+      ],
+      cta: "Naplánovat demo",
+      secondary: "Nebo nás kontaktujte přímo",
+    },
+    form: {
+      title: "Naplánovat demo",
+      name: "Jméno",
+      company: "Společnost",
+      email: "E-mail",
+      phone: "Telefon",
+      message: "Zpráva",
+      submit: "Odeslat",
+      submitting: "Odesílám…",
+      success: "Děkujeme, ozveme se do 24 hodin.",
+      error: "Něco se pokazilo. Zkuste to znovu nebo nás kontaktujte přímo.",
+    },
+    footer: { rights: "Všechna práva vyhrazena.", powered: "Powered by Touch4IT" },
+    cookie: {
+      msg: "Používáme pouze nezbytné cookies a anonymní měření návštěvnosti. Bez nich web nefunguje správně.",
+      accept: "Souhlasím",
+      reject: "Pouze nezbytné",
+    },
+    mockups: {
+      heroChat: {
+        header: "kobikan.app / line-7",
+        q1: "Chyba E-417 na CNC lince 7. Co dělám?",
+        a1: "E-417 = přetížení vřetena. Zkontrolujte chlazení a tlak (≥ 4,2 bar). V 73 % případů stačí výměna filtru F-22.",
+        source: "Zdroj: manual_cnc_v3.pdf · str. 142 · logbook #1847",
+        q2: "Jaké je SKU filtru?",
+        a2: "F-22-A · 4 ks na skladě · regál B3-04",
+      },
+      features: {
+        chatHeader: "chat · linka 7",
+        chatQ: "Jaké je nastavení tlaku pro F-22?",
+        chatA: "4,2–4,8 bar. Při poklesu pod 4,0 bar zastavit linku.",
+        chatSource: "→ manual_cnc_v3.pdf str.142",
+        voiceTranscript: '"Vyměnil jsem filtr F-22, tlak je zpět na 4,5 bar."',
+        voiceSuccess: "✓ Záznam #1848 vytvořen",
+        logbookHeader: "logbook · CNC-07",
+        logbookRows: [
+          { id: "#1847", title: "Přetížení vřetena", who: "J. Mráz" },
+          { id: "#1812", title: "Únik chladiva", who: "P. Novák" },
+          { id: "#1798", title: "Kalibrace senzoru", who: "T. Kováč" },
+        ],
+        integrations: [
+          "Dokumenty",
+          "PLC programy",
+          "MES / SQL",
+          "ERP / SAP",
+          "Schémata",
+          "Logbook",
+        ],
+        alerts: [
+          { text: "CNC-07 alarm E-417", priority: "P1" },
+          { text: "Press-02 servis due", priority: "P2" },
         ],
       },
     },

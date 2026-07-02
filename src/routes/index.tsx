@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef, type ReactNode, type FormEvent } from "react";
 import { T, type Lang } from "@/lib/i18n";
+import { blogHref, HTML_LANG, LANG_LABELS, LANG_ORDER } from "@/lib/lang";
 import { CookieBanner } from "@/components/CookieBanner";
 
 import { TechnicalBackground } from "@/components/TechnicalBackground";
@@ -48,12 +49,16 @@ export const Route = createFileRoute("/")({
       { property: "og:locale", content: "sk_SK" },
       { property: "og:locale:alternate", content: "en_US" },
       { property: "og:locale:alternate", content: "ja_JP" },
+      { property: "og:locale:alternate", content: "de_DE" },
+      { property: "og:locale:alternate", content: "cs_CZ" },
     ],
     links: [
       { rel: "canonical", href: `${SITE_URL}/` },
       { rel: "alternate", hrefLang: "sk", href: `${SITE_URL}/` },
       { rel: "alternate", hrefLang: "en", href: `${SITE_URL}/` },
       { rel: "alternate", hrefLang: "ja", href: `${SITE_URL}/` },
+      { rel: "alternate", hrefLang: "de", href: `${SITE_URL}/` },
+      { rel: "alternate", hrefLang: "cs", href: `${SITE_URL}/` },
       { rel: "alternate", hrefLang: "x-default", href: `${SITE_URL}/` },
     ],
     scripts: [
@@ -98,7 +103,7 @@ function Landing() {
   const openModal = () => setOpen(true);
 
   useEffect(() => {
-    document.documentElement.lang = lang === "sk" ? "sk" : lang === "ja" ? "ja" : "en";
+    document.documentElement.lang = HTML_LANG[lang];
     document.title = t.meta.title;
 
     let desc = document.querySelector('meta[name="description"]');
@@ -193,7 +198,7 @@ function Nav({
             </a>
           ))}
           <Link
-            to={lang === "sk" ? "/blog" : "/blog/en"}
+            to={blogHref(lang)}
             className="hover:text-[color:var(--color-brand)] transition-colors"
           >
             Blog
@@ -201,26 +206,17 @@ function Nav({
         </nav>
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-1 text-xs font-medium">
-            <button
-              onClick={() => setLang("en")}
-              className={`px-1.5 py-0.5 ${lang === "en" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
-            >
-              EN
-            </button>
-            <span className="text-[color:var(--color-neutral-gray)]">|</span>
-            <button
-              onClick={() => setLang("ja")}
-              className={`px-1.5 py-0.5 ${lang === "ja" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
-            >
-              JPN
-            </button>
-            <span className="text-[color:var(--color-neutral-gray)]">|</span>
-            <button
-              onClick={() => setLang("sk")}
-              className={`px-1.5 py-0.5 ${lang === "sk" ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
-            >
-              SK
-            </button>
+            {LANG_ORDER.map((code, i) => (
+              <span key={code} className="contents">
+                {i > 0 && <span className="text-[color:var(--color-neutral-gray)]">|</span>}
+                <button
+                  onClick={() => setLang(code)}
+                  className={`px-1.5 py-0.5 ${lang === code ? "text-[color:var(--color-brand)] underline underline-offset-4" : "text-[color:var(--color-neutral-gray)]"}`}
+                >
+                  {LANG_LABELS[code]}
+                </button>
+              </span>
+            ))}
           </div>
           <CtaButton onClick={onCta} size="sm">
             {t.nav.cta}
@@ -1004,6 +1000,9 @@ function SectionLabel({ children, dark = false }: { children: ReactNode; dark?: 
 /* ---------- Contact Modal ---------- */
 function ContactModal({ t, onClose }: { t: typeof T.sk; onClose: () => void }) {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
@@ -1014,9 +1013,38 @@ function ContactModal({ t, onClose }: { t: typeof T.sk; onClose: () => void }) {
     };
   }, [onClose]);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
+    setError(null);
+    setSubmitting(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          company: formData.get("company"),
+          email: formData.get("email"),
+          phone: formData.get("phone") ?? "",
+          message: formData.get("message") ?? "",
+        }),
+      });
+
+      if (!response.ok) {
+        setError(t.form.error);
+        return;
+      }
+
+      setSent(true);
+    } catch {
+      setError(t.form.error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -1051,16 +1079,22 @@ function ContactModal({ t, onClose }: { t: typeof T.sk; onClose: () => void }) {
           </div>
         ) : (
           <form onSubmit={onSubmit} className="p-6 space-y-3">
-            <Field name="name" label={t.form.name} required />
-            <Field name="company" label={t.form.company} required />
-            <Field name="email" label={t.form.email} type="email" required />
-            <Field name="phone" label={t.form.phone} type="tel" />
-            <Field name="message" label={t.form.message} textarea />
+            <Field name="name" label={t.form.name} required disabled={submitting} />
+            <Field name="company" label={t.form.company} required disabled={submitting} />
+            <Field name="email" label={t.form.email} type="email" required disabled={submitting} />
+            <Field name="phone" label={t.form.phone} type="tel" disabled={submitting} />
+            <Field name="message" label={t.form.message} textarea disabled={submitting} />
+            {error && (
+              <p className="text-sm text-[color:var(--color-brand)]" role="alert">
+                {error}
+              </p>
+            )}
             <button
               type="submit"
-              className="w-full mt-2 rounded-md bg-[color:var(--color-brand)] text-white py-3 font-semibold hover:brightness-110"
+              disabled={submitting}
+              className="w-full mt-2 rounded-md bg-[color:var(--color-brand)] text-white py-3 font-semibold hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {t.form.submit}
+              {submitting ? t.form.submitting : t.form.submit}
             </button>
           </form>
         )}
@@ -1075,15 +1109,17 @@ function Field({
   type = "text",
   required,
   textarea,
+  disabled,
 }: {
   name: string;
   label: string;
   type?: string;
   required?: boolean;
   textarea?: boolean;
+  disabled?: boolean;
 }) {
   const cls =
-    "mt-1 w-full rounded-md border border-[color:var(--color-border)] px-3 py-2 text-sm focus:outline-none focus:border-[color:var(--color-brand)] focus:ring-2 focus:ring-[color:var(--color-brand)]/20";
+    "mt-1 w-full rounded-md border border-[color:var(--color-border)] px-3 py-2 text-sm focus:outline-none focus:border-[color:var(--color-brand)] focus:ring-2 focus:ring-[color:var(--color-brand)]/20 disabled:opacity-60 disabled:cursor-not-allowed";
   return (
     <label className="block">
       <span className="text-xs font-medium text-[color:var(--color-dark)]">
@@ -1091,9 +1127,23 @@ function Field({
         {required && " *"}
       </span>
       {textarea ? (
-        <textarea name={name} required={required} rows={3} maxLength={1000} className={cls} />
+        <textarea
+          name={name}
+          required={required}
+          rows={3}
+          maxLength={1000}
+          disabled={disabled}
+          className={cls}
+        />
       ) : (
-        <input name={name} type={type} required={required} maxLength={255} className={cls} />
+        <input
+          name={name}
+          type={type}
+          required={required}
+          maxLength={255}
+          disabled={disabled}
+          className={cls}
+        />
       )}
     </label>
   );

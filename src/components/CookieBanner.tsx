@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { T, type Lang } from "@/lib/i18n";
 
 const KEY = "kobikan_cookie_consent_v1";
 
-export function CookieBanner({ lang = "sk" }: { lang?: "sk" | "en" | "ja" }) {
+export function CookieBanner({ lang = "sk" }: { lang?: Lang }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -24,24 +25,7 @@ export function CookieBanner({ lang = "sk" }: { lang?: "sk" | "en" | "ja" }) {
 
   if (!visible) return null;
 
-  const t =
-    lang === "sk"
-      ? {
-          msg: "Používame iba nevyhnutné cookies a anonymné meranie návštevnosti. Bez nich web nefunguje korektne.",
-          accept: "Súhlasím",
-          reject: "Len nevyhnutné",
-        }
-      : lang === "ja"
-        ? {
-            msg: "必須Cookieと匿名のアクセス解析のみを使用します。これらがないとサイトが正しく動作しません。",
-            accept: "同意する",
-            reject: "必須のみ",
-          }
-        : {
-            msg: "We only use essential cookies and anonymous analytics. They are required for the site to work properly.",
-            accept: "Accept",
-            reject: "Essential only",
-          };
+  const t = T[lang].cookie;
 
   return (
     <div className="fixed inset-x-3 bottom-3 z-50 md:inset-x-auto md:right-4 md:bottom-4 md:max-w-md">
