@@ -30,6 +30,15 @@
   --color-ring: var(--ring);
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
+  --color-void: var(--void);
+  --color-graphite: var(--graphite);
+  --color-slate: var(--slate);
+  --color-paper: var(--paper);
+  --color-grid-line: var(--grid-line);
+  --color-brand-glow: var(--brand-glow);
+  --color-brand-dim: var(--brand-dim);
+  --color-signal: var(--signal);
+  --color-warn: var(--warn);
   --color-dark: var(--dark);
   --color-dark-soft: var(--dark-soft);
   --color-dark-line: var(--dark-line);
@@ -40,9 +49,15 @@
 }
 
 :root {
-  --radius: 0.5rem;
+  --radius: 0.75rem;
 
-  --background: #ffffff;
+  --void: #070707;
+  --graphite: #0d0d0d;
+  --slate: #141414;
+  --paper: #fafafa;
+  --grid-line: rgba(255, 255, 255, 0.06);
+
+  --background: #fafafa;
   --foreground: #0d0d0d;
 
   --card: #ffffff;
@@ -52,9 +67,13 @@
 
   --brand: #ff3333;
   --brand-foreground: #ffffff;
+  --brand-glow: #ff333340;
+  --brand-dim: #cc2929;
+  --signal: #00e5a0;
+  --warn: #ffb020;
 
   --dark: #0d0d0d;
-  --dark-soft: #161616;
+  --dark-soft: #141414;
   --dark-line: #262626;
   --neutral-gray: #888888;
 
@@ -107,6 +126,22 @@
   animation: fadeInUp 0.7s ease-out both;
 }
 
+@utility focus-ring {
+  outline: none;
+  &:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-brand);
+  }
+}
+
+@utility technical-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -115,5 +150,69 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ---- Lenis smooth scroll ---- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---- Landing (cinematic) helpers ---- */
+@utility hairline {
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+@keyframes scrollHint {
+  0% {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+  70% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+.scroll-hint-bar {
+  animation: scrollHint 1.8s ease-in-out infinite;
+}
+
+@keyframes topologyPulse {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -254;
+  }
+}
+
+.topology-pulse {
+  animation: topologyPulse 3.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
   }
 }
