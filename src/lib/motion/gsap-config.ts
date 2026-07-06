@@ -1,8 +1,9 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 ScrollTrigger.defaults({ markers: false });
 ScrollTrigger.config({ limitCallbacks: true });
 
-export { gsap, ScrollTrigger };
+export { gsap, ScrollTrigger, useGSAP };
