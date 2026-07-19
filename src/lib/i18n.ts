@@ -52,7 +52,7 @@ export type Dict = {
     cards: { title: string; body: string; tag?: string }[];
     note: string;
   };
-  trust: { headline: string; badges: string[] };
+  trust: { headline: string; claim: string; badges: string[] };
   about: {
     label: string;
     headline: string;
@@ -267,6 +267,8 @@ export const T: Record<Lang, Dict> = {
     },
     trust: {
       headline: "Bezpečnosť, ktorej môžete dôverovať",
+      claim:
+        "Žiadny WhatsApp, žiadne necertifikované aplikácie. KobiKan je plne kompliantný asistent, ktorý pozná vaše stroje — každá odpoveď je dohľadateľná vo vašej dokumentácii.",
       badges: [
         "GDPR v súlade",
         "On-Premise nasadenie",
@@ -543,6 +545,8 @@ export const T: Record<Lang, Dict> = {
     },
     trust: {
       headline: "Security you can trust",
+      claim:
+        "No WhatsApp, no uncertified apps. KobiKan is a fully compliant assistant that knows your machinery — every answer traceable back to your own documentation.",
       badges: [
         "GDPR Compliant",
         "On-Premise Deployment",
@@ -815,6 +819,8 @@ export const T: Record<Lang, Dict> = {
     },
     trust: {
       headline: "信頼できるセキュリティ",
+      claim:
+        "WhatsAppも未認証アプリも不要。KobiKanはコンプライアンス準拠のアシスタントとして貴社の設備を熟知 — すべての回答は自社ドキュメントまで遡って確認できます。",
       badges: ["GDPR準拠", "オンプレミス導入", "プライベートクラウド", "SAP / MES / SQL統合"],
     },
     about: {
@@ -1099,6 +1105,8 @@ export const T: Record<Lang, Dict> = {
     },
     trust: {
       headline: "Sicherheit, der Sie vertrauen können",
+      claim:
+        "Kein WhatsApp, keine unzertifizierten Apps. KobiKan ist ein vollständig konformer Assistent, der Ihre Maschinen kennt — jede Antwort ist in Ihrer eigenen Dokumentation nachvollziehbar.",
       badges: [
         "DSGVO-konform",
         "On-Premise-Bereitstellung",
@@ -1383,6 +1391,8 @@ export const T: Record<Lang, Dict> = {
     },
     trust: {
       headline: "Bezpečnost, které můžete důvěřovat",
+      claim:
+        "Žádný WhatsApp, žádné necertifikované aplikace. KobiKan je plně kompliantní asistent, který zná vaše stroje — každá odpověď je dohledatelná ve vaší dokumentaci.",
       badges: [
         "GDPR v souladu",
         "On-Premise nasazení",

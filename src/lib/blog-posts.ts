@@ -16,7 +16,9 @@ export type BlogPost = {
   related: string[]; // slugs in same lang
 };
 
-export const SITE_URL = "https://demo-to-web.lovable.app";
+import { SITE_URL } from "./site";
+
+export { SITE_URL };
 
 // Static OG image used as default share image for all blog posts.
 // Built path so the share-image URL stays absolute on social networks.

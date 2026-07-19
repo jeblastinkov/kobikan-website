@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://demo-to-web.lovable.app/sitemap.xml
+Sitemap: https://kobikan.com/sitemap.xml

@@ -7,11 +7,11 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SITE_URL } from "../lib/site";
 
 const GA_MEASUREMENT_ID = "G-7YKD952CZY";
 
@@ -40,9 +40,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -101,16 +98,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Kobikan je váš digitálny kolega 24/7. Zachytí znalosti vašej prevádzky a premení ich na okamžité odpovede pre každého technika.",
       },
-      {
-        property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bd639f05-8506-4fa0-864a-7ac152ff6f74/id-preview-eff27ed5--7e9eaf47-0a52-45de-912c-459eadb729b1.lovable.app-1782400115841.png",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bd639f05-8506-4fa0-864a-7ac152ff6f74/id-preview-eff27ed5--7e9eaf47-0a52-45de-912c-459eadb729b1.lovable.app-1782400115841.png",
-      },
+      { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
+      { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

@@ -31,3 +31,6 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Raw AI-generated video/photo masters — only the processed public/ output ships
+temp/

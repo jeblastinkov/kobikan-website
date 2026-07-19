@@ -4,7 +4,13 @@ import { T, type Lang } from "@/lib/i18n";
 import { blogHref, HTML_LANG, LANG_LABELS, LANG_ORDER } from "@/lib/lang";
 import { CookieBanner } from "@/components/CookieBanner";
 
-import { TechnicalBackground } from "@/components/TechnicalBackground";
+import { SmoothScroll } from "@/components/cinematic/SmoothScroll";
+import { CinematicVideo } from "@/components/cinematic/CinematicVideo";
+import { GrainOverlay } from "@/components/cinematic/GrainOverlay";
+import { FrameSequence } from "@/components/cinematic/FrameSequence";
+import { KineticHeadline } from "@/components/cinematic/KineticHeadline";
+import { CountUp } from "@/components/cinematic/CountUp";
+import { ShieldCheck, Factory, CloudCog, Cable } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,7 +19,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const YEAR = 2026;
 
-const SITE_URL = "https://demo-to-web.lovable.app";
+import { SITE_URL } from "@/lib/site";
 
 function faqJsonLd(lang: Lang) {
   return {
@@ -126,8 +132,10 @@ function Landing() {
 
   return (
     <div className="min-h-screen bg-white text-[color:var(--color-dark)]">
+      <SmoothScroll />
+      <GrainOverlay />
       <Nav t={t} lang={lang} setLang={setLang} onCta={openModal} />
-      <Hero t={t} onCta={openModal} />
+      <Hero t={t} lang={lang} onCta={openModal} />
       <Problem t={t} />
       <Intro t={t} />
       <Features t={t} />
@@ -256,10 +264,23 @@ function CtaButton({
 }
 
 /* ---------- Hero ---------- */
-function Hero({ t, onCta }: { t: typeof T.sk; onCta: () => void }) {
+function Hero({ t, lang, onCta }: { t: typeof T.sk; lang: Lang; onCta: () => void }) {
   return (
     <section id="top" className="relative overflow-hidden bg-[color:var(--color-dark)] text-white">
-      <TechnicalBackground />
+      <FrameSequence
+        base="/sequences/hero"
+        poster="/posters/poster-handover.jpg"
+        desktopFrames={100}
+        mobileFrames={50}
+        className="absolute inset-0"
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(13,13,13,0.92) 0%, rgba(13,13,13,0.6) 45%, rgba(13,13,13,0.15) 100%), linear-gradient(0deg, rgba(13,13,13,0.95) 0%, transparent 35%)",
+        }}
+      />
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
@@ -276,9 +297,13 @@ function Hero({ t, onCta }: { t: typeof T.sk; onCta: () => void }) {
               {t.hero.eyebrow}
             </span>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
-              {t.hero.h1a}
+              <KineticHeadline text={t.hero.h1a} lang={lang} />
               <br />
-              <span className="text-[color:var(--color-brand)]">{t.hero.h1b}</span>
+              <KineticHeadline
+                text={t.hero.h1b}
+                lang={lang}
+                className="text-[color:var(--color-brand)]"
+              />
             </h1>
             <p className="mt-6 text-lg text-white/70 max-w-xl">{t.hero.sub}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -303,7 +328,7 @@ function Hero({ t, onCta }: { t: typeof T.sk; onCta: () => void }) {
           ].map((s) => (
             <div key={s.v}>
               <div className="text-4xl lg:text-5xl font-semibold text-[color:var(--color-brand)] font-display">
-                {s.v}
+                <CountUp value={s.v} />
               </div>
               <p className="mt-2 text-sm text-white/60 max-w-[260px]">{s.l}</p>
             </div>
@@ -363,16 +388,50 @@ function HeroMock({ mockups }: { mockups: typeof T.sk.mockups.heroChat }) {
 
 /* ---------- Problem ---------- */
 function Problem({ t }: { t: typeof T.sk }) {
+  const ref = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+        const items = gsap.utils.toArray<HTMLElement>(".problem-item");
+        gsap.set(items, { opacity: 0.12, y: 36 });
+        gsap.set(".problem-closing", { opacity: 0 });
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top top",
+            end: "+=1400",
+            pin: true,
+            scrub: 0.5,
+          },
+        });
+        items.forEach((item) => tl.to(item, { opacity: 1, y: 0, duration: 1 }, "+=0.3"));
+        tl.to(".problem-closing", { opacity: 1, duration: 0.8 }, "+=0.2");
+      });
+      mm.add("(max-width: 1023px)", () => {
+        gsap.from(".problem-item", {
+          scrollTrigger: { trigger: ref.current, start: "top 75%" },
+          y: 24,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.15,
+        });
+      });
+    },
+    { scope: ref },
+  );
+
   return (
-    <section className="bg-white py-20 lg:py-28">
-      <div className="container-x">
+    <section ref={ref} className="bg-white py-20 lg:py-28 lg:min-h-screen lg:flex lg:items-center">
+      <div className="container-x w-full">
         <SectionLabel>{t.problem.label}</SectionLabel>
         <h2 className="mt-4 text-3xl lg:text-5xl font-semibold tracking-tight max-w-3xl">
           {t.problem.headline}
         </h2>
         <div className="mt-12 grid gap-px bg-[color:var(--color-border)] border border-[color:var(--color-border)] rounded-xl overflow-hidden md:grid-cols-3">
           {t.problem.items.map((item, i) => (
-            <div key={i} className="bg-white p-6 lg:p-8 flex flex-col gap-4">
+            <div key={i} className="problem-item bg-white p-6 lg:p-8 flex flex-col gap-4">
               <span className="text-[color:var(--color-brand)] font-display font-semibold text-2xl">
                 0{i + 1}
               </span>
@@ -385,7 +444,7 @@ function Problem({ t }: { t: typeof T.sk }) {
             </div>
           ))}
         </div>
-        <p className="mt-8 text-lg font-medium text-[color:var(--color-brand)]">
+        <p className="problem-closing mt-8 text-lg font-medium text-[color:var(--color-brand)]">
           {t.problem.closing}
         </p>
       </div>
@@ -396,8 +455,20 @@ function Problem({ t }: { t: typeof T.sk }) {
 /* ---------- Intro ---------- */
 function Intro({ t }: { t: typeof T.sk }) {
   return (
-    <section className="bg-[color:var(--color-dark)] text-white py-20 lg:py-28">
-      <div className="container-x">
+    <section className="relative overflow-hidden bg-[color:var(--color-dark)] text-white py-20 lg:py-28">
+      <CinematicVideo
+        src="/clips/answer.mp4"
+        poster="/posters/poster-answer.jpg"
+        className="absolute inset-0 h-full w-full object-cover opacity-50"
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.75) 55%, rgba(13,13,13,0.35) 100%), linear-gradient(0deg, rgba(13,13,13,0.95) 0%, transparent 40%)",
+        }}
+      />
+      <div className="container-x relative">
         <SectionLabel dark>{t.intro.label}</SectionLabel>
         <h2 className="mt-4 text-3xl lg:text-5xl font-semibold tracking-tight text-white max-w-3xl">
           {t.intro.headline}
@@ -406,7 +477,7 @@ function Intro({ t }: { t: typeof T.sk }) {
           {t.intro.items.map((it, i) => (
             <div
               key={i}
-              className={`bg-[color:var(--color-dark)] p-8 lg:p-10 ${i === 1 || i === 2 ? "md:py-14" : ""}`}
+              className={`bg-[color:var(--color-dark)]/45 p-8 lg:p-10 ${i === 1 || i === 2 ? "md:py-14" : ""}`}
             >
               <div className="text-[color:var(--color-brand)] font-display font-semibold text-3xl">
                 0{i + 1}
@@ -465,6 +536,25 @@ function FeatureMock({ index, mockups }: { index: number; mockups: typeof T.sk.m
   useGSAP(
     () => {
       if (!containerRef.current) return;
+
+      if (
+        window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)").matches
+      ) {
+        gsap.fromTo(
+          containerRef.current,
+          { yPercent: 4 },
+          {
+            yPercent: -4,
+            ease: "none",
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          },
+        );
+      }
 
       const st = {
         trigger: containerRef.current,
@@ -691,17 +781,58 @@ function Who({ t }: { t: typeof T.sk }) {
 
 /* ---------- How ---------- */
 function HowItWorks({ t, onCta }: { t: typeof T.sk; onCta: () => void }) {
+  const ref = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+        const steps = gsap.utils.toArray<HTMLElement>(".how-step");
+        gsap.set(steps, { opacity: 0.15, y: 30 });
+        gsap.set(".how-progress", { scaleX: 0 });
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top top",
+            end: "+=1400",
+            pin: true,
+            scrub: 0.5,
+          },
+        });
+        tl.to(".how-progress", { scaleX: 1, duration: 4, ease: "none" }, 0);
+        steps.forEach((step, i) => tl.to(step, { opacity: 1, y: 0, duration: 0.8 }, i * 0.95));
+      });
+      mm.add("(max-width: 1023px)", () => {
+        gsap.from(".how-step", {
+          scrollTrigger: { trigger: ref.current, start: "top 75%" },
+          y: 24,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.15,
+        });
+      });
+    },
+    { scope: ref },
+  );
+
   return (
-    <section id="how" className="bg-[color:var(--color-dark)] text-white py-20 lg:py-28">
-      <div className="container-x">
+    <section
+      ref={ref}
+      id="how"
+      className="bg-[color:var(--color-dark)] text-white py-20 lg:py-28 lg:min-h-screen lg:flex lg:items-center"
+    >
+      <div className="container-x w-full">
         <SectionLabel dark>{t.how.label}</SectionLabel>
         <h2 className="mt-4 text-3xl lg:text-5xl font-semibold tracking-tight text-white max-w-3xl">
           {t.how.headline}
         </h2>
 
-        <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-xl overflow-hidden">
+        <div className="mt-10 hidden lg:block h-0.5 bg-white/10 relative overflow-hidden rounded">
+          <div className="how-progress absolute inset-0 origin-left bg-[color:var(--color-brand)]" />
+        </div>
+        <div className="mt-4 lg:mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-xl overflow-hidden">
           {t.how.steps.map((s) => (
-            <div key={s.n} className="bg-[color:var(--color-dark)] p-7">
+            <div key={s.n} className="how-step bg-[color:var(--color-dark)] p-7">
               <div className="font-mono text-xs text-[color:var(--color-brand)]">STEP {s.n}</div>
               <h3 className="mt-3 text-lg font-semibold text-white">{s.title}</h3>
               <p className="mt-2 text-sm text-white/60">{s.body}</p>
@@ -846,22 +977,44 @@ function About({ t }: { t: typeof T.sk }) {
 }
 
 /* ---------- Trust ---------- */
+const TRUST_ICONS = [ShieldCheck, Factory, CloudCog, Cable];
+
 function Trust({ t }: { t: typeof T.sk }) {
   return (
-    <section className="bg-white py-14 border-t border-[color:var(--color-border)]">
-      <div className="container-x">
-        <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--color-neutral-gray)] font-semibold">
+    <section className="relative overflow-hidden bg-[color:var(--color-dark)] text-white py-20 lg:py-28">
+      <img
+        src="/trust-backplate.jpg"
+        alt=""
+        aria-hidden
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover opacity-30 pointer-events-none"
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.7) 60%, rgba(13,13,13,0.4) 100%)",
+        }}
+      />
+      <div className="container-x relative">
+        <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--color-brand)] font-semibold">
           {t.trust.headline}
         </p>
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-5">
-          {t.trust.badges.map((b, i) => (
-            <div key={i} className="flex items-center gap-3 text-sm font-medium">
-              <span className="h-9 w-9 rounded-md bg-[color:var(--color-accent)] grid place-items-center text-[color:var(--color-brand)]">
-                {["🔒", "🏭", "☁️", "🔗"][i]}
-              </span>
-              {b}
-            </div>
-          ))}
+        <p className="mt-5 text-2xl lg:text-4xl font-semibold tracking-tight max-w-4xl leading-snug">
+          {t.trust.claim}
+        </p>
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-5">
+          {t.trust.badges.map((b, i) => {
+            const Icon = TRUST_ICONS[i] ?? ShieldCheck;
+            return (
+              <div key={i} className="flex items-center gap-3 text-sm font-medium text-white/85">
+                <span className="h-9 w-9 shrink-0 rounded-md bg-white/10 border border-white/15 grid place-items-center text-[color:var(--color-brand)]">
+                  <Icon size={18} strokeWidth={1.8} />
+                </span>
+                {b}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -925,8 +1078,23 @@ function Faq({ t }: { t: typeof T.sk }) {
 /* ---------- Final CTA ---------- */
 function FinalCta({ t, onCta }: { t: typeof T.sk; onCta: () => void }) {
   return (
-    <section id="contact" className="bg-[color:var(--color-brand)] text-white py-20 lg:py-28">
-      <div className="container-x">
+    <section
+      id="contact"
+      className="relative overflow-hidden bg-[color:var(--color-dark)] text-white py-20 lg:py-28"
+    >
+      <CinematicVideo
+        src="/clips/shift.mp4"
+        poster="/posters/poster-shift.jpg"
+        className="absolute inset-0 h-full w-full object-cover opacity-45"
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(255,51,51,0.85) 0%, rgba(180,20,20,0.6) 50%, rgba(13,13,13,0.55) 100%)",
+        }}
+      />
+      <div className="container-x relative">
         <h2 className="text-3xl lg:text-5xl font-semibold tracking-tight text-white max-w-3xl">
           {t.finalCta.headline}
         </h2>
@@ -935,7 +1103,9 @@ function FinalCta({ t, onCta }: { t: typeof T.sk; onCta: () => void }) {
         <div className="mt-10 grid sm:grid-cols-3 gap-8 border-y border-white/20 py-10">
           {t.finalCta.stats.map((s, i) => (
             <div key={i}>
-              <div className="text-3xl lg:text-4xl font-semibold font-display">{s.v}</div>
+              <div className="text-3xl lg:text-4xl font-semibold font-display">
+                <CountUp value={s.v} />
+              </div>
               <p className="mt-2 text-sm text-white/80">{s.l}</p>
             </div>
           ))}
