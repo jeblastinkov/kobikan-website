@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -11,6 +12,8 @@ import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
+import type { Lang } from "../lib/i18n";
+import { HTML_LANG } from "../lib/lang";
 import { SITE_URL } from "../lib/site";
 
 const GA_MEASUREMENT_ID = "G-7YKD952CZY";
@@ -138,8 +141,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const landingLanguage = useRouterState({
+    select: (state) => state.matches.find((match) => match.routeId === "/")?.loaderData,
+  });
+  const htmlLanguage =
+    landingLanguage != null &&
+    typeof landingLanguage === "object" &&
+    "language" in landingLanguage &&
+    typeof landingLanguage.language === "string" &&
+    landingLanguage.language in HTML_LANG
+      ? HTML_LANG[landingLanguage.language as Lang]
+      : "en";
+
   return (
-    <html lang="en">
+    <html lang={htmlLanguage}>
       <head>
         <HeadContent />
       </head>

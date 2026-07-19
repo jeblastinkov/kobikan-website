@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef, type ReactNode, type FormEvent } from "react";
 import { T, type Lang } from "@/lib/i18n";
-import { blogHref, HTML_LANG, LANG_LABELS, LANG_ORDER } from "@/lib/lang";
+import { blogHref, HTML_LANG, LANG_LABELS, LANG_ORDER, OG_LOCALE } from "@/lib/lang";
+import { getVisitorLanguage, JAPAN_LANGUAGES, LANGUAGE_COOKIE } from "@/lib/visitor-language";
 import { CookieBanner } from "@/components/CookieBanner";
 
 import { SmoothScroll } from "@/components/cinematic/SmoothScroll";
@@ -34,77 +35,89 @@ function faqJsonLd(lang: Lang) {
 }
 
 export const Route = createFileRoute("/")({
+  loader: () => getVisitorLanguage(),
   component: Landing,
-  head: () => ({
-    meta: [
-      { title: "KobiKan — AI asistent údržby pre priemyselné prevádzky" },
-      {
-        name: "description",
-        content:
-          "KobiKan zachytí znalosti vašej prevádzky a mení ich na okamžité odpovede pre každého technika. Pilot za 14 dní. On-prem alebo cloud. Projekt firmy Touch4IT.",
-      },
-      { property: "og:title", content: "KobiKan — AI asistent údržby pre priemyselné prevádzky" },
-      {
-        property: "og:description",
-        content:
-          "KobiKan zachytí znalosti vašej prevádzky a mení ich na okamžité odpovede pre každého technika. Pilot za 14 dní. On-prem alebo cloud. Projekt firmy Touch4IT.",
-      },
-      { property: "og:url", content: `${SITE_URL}/` },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "KobiKan" },
-      { property: "og:locale", content: "sk_SK" },
-      { property: "og:locale:alternate", content: "en_US" },
-      { property: "og:locale:alternate", content: "ja_JP" },
-      { property: "og:locale:alternate", content: "de_DE" },
-      { property: "og:locale:alternate", content: "cs_CZ" },
-    ],
-    links: [
-      { rel: "canonical", href: `${SITE_URL}/` },
-      { rel: "alternate", hrefLang: "sk", href: `${SITE_URL}/` },
-      { rel: "alternate", hrefLang: "en", href: `${SITE_URL}/` },
-      { rel: "alternate", hrefLang: "ja", href: `${SITE_URL}/` },
-      { rel: "alternate", hrefLang: "de", href: `${SITE_URL}/` },
-      { rel: "alternate", hrefLang: "cs", href: `${SITE_URL}/` },
-      { rel: "alternate", hrefLang: "x-default", href: `${SITE_URL}/` },
-    ],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "Organization",
-              name: "KobiKan",
-              url: SITE_URL,
-              logo: `${SITE_URL}/favicon.ico`,
-              description: "AI asistent údržby pre priemyselné prevádzky.",
-              parentOrganization: {
+  head: ({ loaderData }) => {
+    const lang = loaderData?.language ?? "en";
+    const pageUrl = loaderData?.isJapanEdition ? "https://kobikan.jp" : SITE_URL;
+    const t = T[lang];
+
+    return {
+      meta: [
+        { title: t.meta.title },
+        {
+          name: "description",
+          content: t.meta.description,
+        },
+        { property: "og:title", content: t.meta.title },
+        {
+          property: "og:description",
+          content: t.meta.description,
+        },
+        { property: "og:url", content: `${pageUrl}/` },
+        { property: "og:type", content: "website" },
+        { property: "og:site_name", content: "KobiKan" },
+        { property: "og:locale", content: OG_LOCALE[lang] },
+        { property: "og:locale:alternate", content: "en_US" },
+        { property: "og:locale:alternate", content: "ja_JP" },
+        { property: "og:locale:alternate", content: "de_DE" },
+        { property: "og:locale:alternate", content: "cs_CZ" },
+      ],
+      links: [
+        { rel: "canonical", href: `${pageUrl}/` },
+        { rel: "alternate", hrefLang: "en", href: `${SITE_URL}/` },
+        { rel: "alternate", hrefLang: "ja", href: "https://kobikan.jp/" },
+        { rel: "alternate", hrefLang: "sk", href: `${SITE_URL}/` },
+        { rel: "alternate", hrefLang: "de", href: `${SITE_URL}/` },
+        { rel: "alternate", hrefLang: "cs", href: `${SITE_URL}/` },
+        { rel: "alternate", hrefLang: "x-default", href: `${SITE_URL}/` },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
                 "@type": "Organization",
-                name: "Touch4IT",
-                url: "https://touch4it.com",
+                name: "KobiKan",
+                url: pageUrl,
+                logo: `${pageUrl}/favicon.ico`,
+                description: "AI asistent údržby pre priemyselné prevádzky.",
+                parentOrganization: {
+                  "@type": "Organization",
+                  name: "Touch4IT",
+                  url: "https://touch4it.com",
+                },
               },
-            },
-            {
-              "@type": "WebSite",
-              name: "KobiKan",
-              url: SITE_URL,
-            },
-          ],
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify(faqJsonLd("sk")),
-      },
-    ],
-  }),
+              {
+                "@type": "WebSite",
+                name: "KobiKan",
+                url: pageUrl,
+              },
+            ],
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(faqJsonLd(lang)),
+        },
+      ],
+    };
+  },
 });
 
 function Landing() {
-  const [lang, setLang] = useState<Lang>("sk");
+  const visitorLocale = Route.useLoaderData();
+  const [lang, setLangState] = useState<Lang>(visitorLocale.language);
   const [open, setOpen] = useState(false);
   const t = T[lang];
+  const availableLanguages = visitorLocale.isJapanEdition ? JAPAN_LANGUAGES : LANG_ORDER;
+
+  const setLang = (nextLanguage: Lang) => {
+    setLangState(nextLanguage);
+    document.cookie = `${LANGUAGE_COOKIE}=${nextLanguage}; Path=/; Max-Age=31536000; SameSite=Lax`;
+  };
 
   const openModal = () => setOpen(true);
 
@@ -134,7 +147,13 @@ function Landing() {
     <div className="min-h-screen bg-white text-[color:var(--color-dark)]">
       <SmoothScroll />
       <GrainOverlay />
-      <Nav t={t} lang={lang} setLang={setLang} onCta={openModal} />
+      <Nav
+        t={t}
+        lang={lang}
+        availableLanguages={availableLanguages}
+        setLang={setLang}
+        onCta={openModal}
+      />
       <Hero t={t} lang={lang} onCta={openModal} />
       <Problem t={t} />
       <Intro t={t} />
@@ -163,11 +182,13 @@ function Logo({ className = "" }: { className?: string }) {
 function Nav({
   t,
   lang,
+  availableLanguages,
   setLang,
   onCta,
 }: {
   t: typeof T.sk;
   lang: Lang;
+  availableLanguages: readonly Lang[];
   setLang: (l: Lang) => void;
   onCta: () => void;
 }) {
@@ -214,7 +235,7 @@ function Nav({
         </nav>
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-1 text-xs font-medium">
-            {LANG_ORDER.map((code, i) => (
+            {availableLanguages.map((code, i) => (
               <span key={code} className="contents">
                 {i > 0 && <span className="text-[color:var(--color-neutral-gray)]">|</span>}
                 <button
