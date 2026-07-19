@@ -1,4 +1,4 @@
-export type BlogLang = "sk" | "en";
+export type BlogLang = "sk" | "en" | "ja";
 
 export type BlogSection = { h: string; p: string[] };
 
@@ -24,17 +24,35 @@ export { SITE_URL };
 // Built path so the share-image URL stays absolute on social networks.
 export const DEFAULT_BLOG_OG_IMAGE = `${SITE_URL}/og-blog-pillar.jpg`;
 
-// SK <-> EN slug pairing for hreflang alternates.
-const PAIRS: Array<[string, string]> = [
-  ["ai-v-priemyselnej-vyrobe", "ai-in-manufacturing"],
-  ["ako-ai-znizuje-neplanovane-vypadky", "how-ai-reduces-unplanned-downtime"],
-  ["zachytavanie-znalosti-technikov", "capturing-technician-knowledge"],
-  ["plc-kod-a-ai", "plc-code-and-ai"],
+// Slug groups for hreflang alternates, ordered as SK, EN, JA.
+const TRANSLATION_GROUPS: Array<Record<BlogLang, string>> = [
+  {
+    sk: "ai-v-priemyselnej-vyrobe",
+    en: "ai-in-manufacturing",
+    ja: "seizogyo-ni-okeru-ai",
+  },
+  {
+    sk: "ako-ai-znizuje-neplanovane-vypadky",
+    en: "how-ai-reduces-unplanned-downtime",
+    ja: "ai-de-toppatsu-teishi-wo-sakugen",
+  },
+  {
+    sk: "zachytavanie-znalosti-technikov",
+    en: "capturing-technician-knowledge",
+    ja: "gijutsusha-no-chishiki-keishou",
+  },
+  {
+    sk: "plc-kod-a-ai",
+    en: "plc-code-and-ai",
+    ja: "plc-code-to-ai",
+  },
 ];
 
-export function pairedSlug(post: { lang: BlogLang; slug: string }): string | undefined {
-  if (post.lang === "sk") return PAIRS.find((p) => p[0] === post.slug)?.[1];
-  return PAIRS.find((p) => p[1] === post.slug)?.[0];
+export function translatedSlugs(post: { lang: BlogLang; slug: string }) {
+  const group = TRANSLATION_GROUPS.find((candidate) => candidate[post.lang] === post.slug);
+  return group
+    ? (Object.entries(group) as Array<[BlogLang, string]>).map(([lang, slug]) => ({ lang, slug }))
+    : [];
 }
 
 export const POSTS: BlogPost[] = [
@@ -137,7 +155,7 @@ export const POSTS: BlogPost[] = [
         p: [
           "MTTR pre top 10 najčastejších porúch. Sledujte trend prvé 3 mesiace.",
           "Počet opakovaných porúch na rovnakom stroji — mal by klesnúť, lebo technici majú prístup k predošlým riešeniam.",
-          "Eskalácie mimo pracovný čas. Ak sa znížia, znamená to, že nočná zmena má v ruke skutočného „seniora 24/7\“.",
+          "Eskalácie mimo pracovný čas. Ak sa znížia, znamená to, že nočná zmena má v ruke skutočného „seniora 24/7“.",
         ],
       },
     ],
@@ -148,7 +166,7 @@ export const POSTS: BlogPost[] = [
     lang: "sk",
     title: "Zachytávanie znalostí skúsených technikov pred odchodom do dôchodku",
     description:
-      "Ako previesť tiché znalosti seniorov do systému, ktorý je dostupný celému tímu — bez papierovania a bez „prosím napíš to do Wordu\“.",
+      "Ako previesť tiché znalosti seniorov do systému, ktorý je dostupný celému tímu — bez papierovania a bez „prosím napíš to do Wordu“.",
     date: "2026-06-25",
     readMin: 5,
     category: "Knowledge",
@@ -195,7 +213,7 @@ export const POSTS: BlogPost[] = [
         h: "Čo dnes AI zvládne čítať",
         p: [
           "Siemens S7 (SCL, LAD, FBD), Rockwell Studio 5000, Beckhoff TwinCAT, Mitsubishi GX Works. Importujú sa exportované programy, AI ich prepojí s I/O zoznamom a štruktúrami HMI.",
-          "Technik sa potom môže opýtať: „Prečo sa zastavil cyklus na stanici 4?\“ a dostane odpoveď s konkrétnym vstupom, aktuálnym stavom a posledným záznamom, kedy sa to stalo.",
+          "Technik sa potom môže opýtať: „Prečo sa zastavil cyklus na stanici 4?“ a dostane odpoveď s konkrétnym vstupom, aktuálnym stavom a posledným záznamom, kedy sa to stalo.",
         ],
       },
       {
@@ -393,6 +411,184 @@ export const POSTS: BlogPost[] = [
     ],
     related: ["ai-in-manufacturing", "capturing-technician-knowledge"],
   },
+
+  // ============== JA ==============
+  {
+    slug: "seizogyo-ni-okeru-ai",
+    lang: "ja",
+    title: "製造業におけるAI：保全業務への実践的な導入ガイド",
+    description:
+      "製造現場にAIを導入し、突発停止を減らし、技術者の知識を蓄積するための実践ガイド。2週間のパイロットから始め、オンプレミスにもクラウドにも対応できます。",
+    date: "2026-06-30",
+    readMin: 12,
+    category: "導入ガイド",
+    pillar: true,
+    intro:
+      "製造業におけるAIの目的は、人を置き換えることではありません。工場が長年培ってきた最良の知識に、すべての技術者が必要な瞬間にアクセスできるようにすることです。本記事では、2週間のパイロットから全社展開まで、保全業務にAIを導入する現実的な手順を解説します。",
+    sections: [
+      {
+        h: "なぜ今なのか",
+        p: [
+          "今後5〜10年で、経験豊富な技術者の約半数が退職すると見込まれています。それと同時に、『このバルブは3分の2回転だけ締める』『冬になると決まって落ちるヒューズがある』『予備センサーはどの引き出しにある』といった、文書化されていない知識も失われます。",
+          "一方で、設備はますます複雑になっています。現在の組立ライン1本が1時間に生み出すデータ量は、15年前の工場全体を上回ります。従来のMESやCMMSはデータを保存できますが、午前3時にラインが停止した際、技術者が答えをすぐに見つける手助けまではしてくれません。",
+        ],
+      },
+      {
+        h: "保全AIが実際に解決すること",
+        p: [
+          "文書から即座に回答を取得できます。マニュアル、図面、I/Oリスト、PLCプログラム、保全履歴を索引化し、200ページのPDFではなく、根拠となる出典付きの具体的な回答を技術者に提示します。",
+          "現場のノウハウを蓄積できます。修理後に技術者が作業内容を音声で残すと、AIが構造化された検索可能な記録に変換し、数秒でチーム全体が利用できるようにします。",
+          "状況把握と予測ができます。AIが設備データ（MES、SQL、SCADA）と修理履歴を結び付け、故障に至る前に繰り返しパターンを検知します。",
+        ],
+      },
+      {
+        h: "現実的な2週間のパイロット",
+        p: [
+          "第1週 — データと対象範囲。1つの生産エリア（通常3〜10台の設備）を選び、文書（PDF、図面）、MES／SQLのエクスポートデータ、必要に応じてPLCコードを接続します。オンプレミス構成なら、データが社内ネットワークの外へ出ることはありません。",
+          "第2週 — 技術者による検証。実際のシフト担当者にアシスタントを使ってもらいます。質問数、上位者へのエスカレーションなしで解決できた件数、誤った回答を測定し、そのフィードバックをもとに毎日改善します。",
+          "パイロット終了時には、原因特定までの平均時間、熟練者へのエスカレーション件数、チームが週に削減できた時間を数値で確認できます。",
+        ],
+      },
+      {
+        h: "3つの導入モデル",
+        p: [
+          "フルクラウド — 最短で開始でき、データはEU域内に保管されます。小規模工場やパイロット段階に適しています。",
+          "オンプレミス＋AIクラウド（最も一般的）— 文書やプロセスデータは社内ネットワークに保持し、匿名化された質問だけをクラウドAIへ送信します。",
+          "フルオンプレミス — モデル全体を自社インフラで稼働させます。データは一切工場外へ出ません。製薬、防衛、重要インフラなど、規制の厳しい環境に適しています。",
+        ],
+      },
+      {
+        h: "導入時によくある失敗",
+        p: [
+          "大規模な『デジタルトランスフォーメーション計画』から始めることです。成果が出やすいのは逆の進め方で、1つのエリア、2〜3人の技術者、2週間から始めます。実際に効果を確認してから展開範囲を広げます。",
+          "最初にすべてのデータを整理しようとすることです。現在のAIは不完全な文書にも対応できます。まず始めて、実際に使われる情報から段階的に整備する方が効果的です。",
+          "意思決定から技術者を外すことです。現場で使われないツールに価値はありません。最初の1週間に得られる技術者のフィードバックは、どのダッシュボードよりも重要です。",
+        ],
+      },
+      {
+        h: "投資対効果の測り方",
+        p: [
+          "MTTR（平均修復時間）。導入後3か月で通常20〜40％短縮します。特に、過去に解決済みの故障を技術者が数秒で見つけられるケースで効果が大きくなります。",
+          "熟練者へのエスカレーション。若手が自力で解決できる範囲が広がり、熟練者はより複雑な問題や教育に集中できます。",
+          "新人技術者の立ち上がり。工場内の各設備を理解したアシスタントを携行できるため、習熟期間を数か月から数週間へ短縮できます。",
+        ],
+      },
+    ],
+    related: [
+      "ai-de-toppatsu-teishi-wo-sakugen",
+      "gijutsusha-no-chishiki-keishou",
+      "plc-code-to-ai",
+    ],
+  },
+  {
+    slug: "ai-de-toppatsu-teishi-wo-sakugen",
+    lang: "ja",
+    title: "AIで製造現場の突発停止を減らす方法",
+    description:
+      "製造現場の突発停止は、1分あたり数千ユーロ規模の損失につながります。AIで修復時間を短縮し、故障の再発を防ぐ方法を解説します。",
+    date: "2026-06-28",
+    readMin: 6,
+    category: "ダウンタイム",
+    intro:
+      "自動車業界では、突発停止による損失は1分あたり数千ユーロ規模に達します。しかし、その多くは過去にも解決された故障です。ただし、夜勤の担当者がその事実を知らないことがあります。",
+    sections: [
+      {
+        h: "最も時間を失う場面",
+        p: [
+          "ARCやPlant Engineeringの調査では、突発停止時の30〜50％が、マニュアル、図面、連絡先、過去の修理記録などの情報検索に費やされると繰り返し報告されています。",
+          "AIアシスタントは、この時間を数分短くするだけではありません。技術者が設備の前で出典付きの回答を受け取れるため、数十分かかっていた検索を数秒にまで短縮します。",
+        ],
+      },
+      {
+        h: "再発故障という最大の隠れコスト",
+        p: [
+          "故障の最大70％は、前回の修理時の人的ミスや、状況情報の不足に起因します。AIは設備データと修理記録を結び付け、同じ状況が繰り返されそうなときに知らせます。",
+          "例えば、あるセンサーが過去半年に3回故障し、その直前に毎回回路内の圧力が低下していた場合、システムは次の故障を発生前に予測できます。",
+        ],
+      },
+      {
+        h: "パイロットで測定すべき指標",
+        p: [
+          "発生頻度の高い上位10件の故障に対するMTTR。最初の3か月間、その推移を追います。",
+          "同一設備で再発した故障の件数。技術者が過去の解決策を利用できるため、減少するはずです。",
+          "勤務時間外のエスカレーション件数。これが減れば、夜勤チームが実質的に『24時間対応の熟練者』を得たことを意味します。",
+        ],
+      },
+    ],
+    related: ["seizogyo-ni-okeru-ai", "gijutsusha-no-chishiki-keishou"],
+  },
+  {
+    slug: "gijutsusha-no-chishiki-keishou",
+    lang: "ja",
+    title: "熟練技術者の退職前にノウハウを継承する方法",
+    description:
+      "熟練者の暗黙知を、チーム全体が使える仕組みに移す方法。書類作業や『Wordに書いてください』という依頼は不要です。",
+    date: "2026-06-25",
+    readMin: 5,
+    category: "知識継承",
+    intro:
+      "工場で最も価値のある知識の多くは、文書化されていません。20年以上働いてきた数人の熟練者の頭の中にあります。現在のAIなら、熟練者に余分な負担をかけずに、その知識を蓄積できます。",
+    sections: [
+      {
+        h: "従来の方法が定着しない理由",
+        p: [
+          "Wiki、SharePoint、Confluenceなど、さまざまな方法が試されてきました。しかし現実には、熟練技術者に毎日2時間も文書を書く余裕はありません。たとえ記録しても、若手は適切な検索語を知らないため、その情報を見つけられません。",
+          "必要なのは、より優れたエディターではなく、書くことから話すことへの形式転換です。",
+        ],
+      },
+      {
+        h: "音声ログブックの実際",
+        p: [
+          "修理後、技術者が30〜60秒で、何が起きたか、何をしたか、何に注意すべきかを音声で残します。AIは内容を設備、部品、症状などのタグ付き記録に構造化し、チーム全体がすぐに検索できるようにします。",
+          "熟練者にとって追加の作業時間はほぼゼロです。若手は同じ事例が起きたとき、3秒で過去の対応を見つけられます。",
+        ],
+      },
+      {
+        h: "1年後に得られるもの",
+        p: [
+          "自然に成長し続ける知識ベースができます。通常、1年後には1,500〜3,000件の記録が蓄積され、繰り返し発生する状況の大部分をカバーします。",
+          "熟練者が退職しても、問題への向き合い方はシステムに残ります。若手にとって、無味乾燥なマニュアルより理解しやすい本人の言い回しも含まれます。",
+        ],
+      },
+    ],
+    related: ["seizogyo-ni-okeru-ai", "ai-de-toppatsu-teishi-wo-sakugen"],
+  },
+  {
+    slug: "plc-code-to-ai",
+    lang: "ja",
+    title: "PLCコードとAI：設備データを技術者が活用できる形に",
+    description:
+      "PLCプログラムには多くの答えがありますが、読める技術者は限られています。AIがPLCコードを読み、分かりやすい言葉で説明する仕組みを紹介します。",
+    date: "2026-06-22",
+    readMin: 5,
+    category: "システム連携",
+    intro:
+      "故障時の疑問の多くは、PLCプログラムから答えを得られます。どの入力がどの出力を停止させるのか、どの条件でアラームが発生するのか、なぜサイクルが停止したのか。しかし、工場内でPLCコードを読める人は全体の約5％にすぎません。",
+    sections: [
+      {
+        h: "現在AIが読み取れるもの",
+        p: [
+          "Siemens S7（SCL、LAD、FBD）、Rockwell Studio 5000、Beckhoff TwinCAT、Mitsubishi GX Worksに対応します。エクスポートしたプログラムを取り込み、I/OリストやHMI構成と関連付けます。",
+          "技術者は『ステーション4でサイクルが停止したのはなぜですか？』と質問し、該当する入力、現在の状態、前回同じ事象が起きたときの記録を含む回答を得られます。",
+        ],
+      },
+      {
+        h: "セキュリティとIT",
+        p: [
+          "PLCコードが工場外へ出ることはありません。オンプレミス構成ではローカル環境で索引化し、AIは社内ネットワーク経由でアクセスします。IT／OT部門にとって、ネットワーク分離を損なわない連携方式です。",
+          "標準は読み取り専用です。AIがPLCへ書き込むことはありません。変更時には必ず、責任を持つ担当者が判断に関与します。",
+        ],
+      },
+      {
+        h: "現場で得られる効果",
+        p: [
+          "若手技術者でも、初めて見るステーションの故障を解決できます。PLCの動作をAIが説明するため、PLCプログラマーへ電話する必要がありません。",
+          "PLCプログラマーは、同じ質問に何度も答えるのではなく、本来の開発業務に集中できます。",
+        ],
+      },
+    ],
+    related: ["seizogyo-ni-okeru-ai", "gijutsusha-no-chishiki-keishou"],
+  },
 ];
 
 export function postsByLang(lang: BlogLang): BlogPost[] {
@@ -404,5 +600,5 @@ export function findPost(lang: BlogLang, slug: string): BlogPost | undefined {
 }
 
 export function postUrl(post: BlogPost): string {
-  return post.lang === "sk" ? `/blog/${post.slug}` : `/blog/en/${post.slug}`;
+  return post.lang === "sk" ? `/blog/${post.slug}` : `/blog/${post.lang}/${post.slug}`;
 }

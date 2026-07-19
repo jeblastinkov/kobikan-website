@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import {
   DEFAULT_BLOG_OG_IMAGE,
   findPost,
-  pairedSlug,
   postsByLang,
   postUrl,
   SITE_URL,
+  translatedSlugs,
+  type BlogLang,
   type BlogPost,
 } from "@/lib/blog-posts";
+import { BLOG_I18N } from "@/lib/i18n";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -31,12 +33,14 @@ function SKPost() {
 
 export function postHead(post: BlogPost) {
   const url = `${SITE_URL}${postUrl(post)}`;
-  const pair = pairedSlug(post);
-  const altLang: "sk" | "en" = post.lang === "sk" ? "en" : "sk";
-  const altUrl = pair
-    ? `${SITE_URL}${altLang === "sk" ? `/blog/${pair}` : `/blog/en/${pair}`}`
-    : undefined;
-  const blogIndexUrl = post.lang === "sk" ? `${SITE_URL}/blog` : `${SITE_URL}/blog/en`;
+  const alternates = translatedSlugs(post).map(({ lang, slug }) => ({
+    lang,
+    href: `${SITE_URL}${lang === "sk" ? `/blog/${slug}` : `/blog/${lang}/${slug}`}`,
+  }));
+  const englishUrl = alternates.find(({ lang }) => lang === "en")?.href ?? url;
+  const blogIndexUrl = `${SITE_URL}${blogIndexPath(post.lang)}`;
+  const locale = post.lang === "sk" ? "sk_SK" : post.lang === "ja" ? "ja_JP" : "en_US";
+  const languageTag = post.lang === "sk" ? "sk-SK" : post.lang === "ja" ? "ja-JP" : "en-US";
 
   return {
     meta: [
@@ -47,7 +51,7 @@ export function postHead(post: BlogPost) {
       { property: "og:url", content: url },
       { property: "og:type", content: "article" },
       { property: "og:image", content: DEFAULT_BLOG_OG_IMAGE },
-      { property: "og:locale", content: post.lang === "sk" ? "sk_SK" : "en_US" },
+      { property: "og:locale", content: locale },
       { property: "article:published_time", content: post.date },
       { property: "article:section", content: post.category },
       { property: "article:publisher", content: "https://touch4it.com" },
@@ -58,14 +62,8 @@ export function postHead(post: BlogPost) {
     ],
     links: [
       { rel: "canonical", href: url },
-      // Self + alternate hreflang
-      { rel: "alternate", hrefLang: post.lang === "sk" ? "sk" : "en", href: url },
-      ...(altUrl
-        ? [
-            { rel: "alternate", hrefLang: altLang, href: altUrl },
-            { rel: "alternate", hrefLang: "x-default", href: post.lang === "en" ? url : altUrl },
-          ]
-        : []),
+      ...alternates.map(({ lang, href }) => ({ rel: "alternate", hrefLang: lang, href })),
+      { rel: "alternate", hrefLang: "x-default", href: englishUrl },
     ],
     scripts: [
       {
@@ -78,7 +76,7 @@ export function postHead(post: BlogPost) {
           image: [DEFAULT_BLOG_OG_IMAGE],
           datePublished: post.date,
           dateModified: post.date,
-          inLanguage: post.lang === "sk" ? "sk-SK" : "en-US",
+          inLanguage: languageTag,
           author: { "@type": "Organization", name: "KobiKan", url: SITE_URL },
           publisher: {
             "@type": "Organization",
@@ -100,7 +98,7 @@ export function postHead(post: BlogPost) {
             {
               "@type": "ListItem",
               position: 1,
-              name: post.lang === "sk" ? "Domov" : "Home",
+              name: BLOG_I18N[post.lang].breadcrumbHome,
               item: `${SITE_URL}/`,
             },
             {
@@ -123,33 +121,8 @@ export function postHead(post: BlogPost) {
 }
 
 export function PostView({ post }: { post: BlogPost }) {
-  const t =
-    post.lang === "sk"
-      ? {
-          back: "Späť na blog",
-          related: "Súvisiace články",
-          cta: "Naplánovať demo",
-          ctaSub: "Pozrite KobiKan na vašich strojoch.",
-          home: "KobiKan",
-          read: "min čítania",
-          breadcrumbHome: "Domov",
-          stickyMsg: "Páči sa vám článok?",
-          stickyCta: "Naplánovať demo",
-          author: "Tím KobiKan · Touch4IT",
-        }
-      : {
-          back: "Back to blog",
-          related: "Related articles",
-          cta: "Book a demo",
-          ctaSub: "See KobiKan on your own machines.",
-          home: "KobiKan",
-          read: "min read",
-          breadcrumbHome: "Home",
-          stickyMsg: "Like what you're reading?",
-          stickyCta: "Book a demo",
-          author: "KobiKan team · Touch4IT",
-        };
-  const blogHref = post.lang === "sk" ? "/blog" : "/blog/en";
+  const t = BLOG_I18N[post.lang];
+  const blogHref = blogIndexPath(post.lang);
   const related = post.related
     .map((s) => postsByLang(post.lang).find((p) => p.slug === s))
     .filter((p): p is BlogPost => Boolean(p));
@@ -191,11 +164,10 @@ export function PostView({ post }: { post: BlogPost }) {
           {post.title}
         </h1>
         <p className="mt-4 text-sm text-[color:var(--color-neutral-gray)]">
-          {new Date(post.date).toLocaleDateString(post.lang === "sk" ? "sk-SK" : "en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}{" "}
+          {new Date(post.date).toLocaleDateString(
+            post.lang === "sk" ? "sk-SK" : post.lang === "ja" ? "ja-JP" : "en-US",
+            { year: "numeric", month: "long", day: "numeric" },
+          )}{" "}
           · {post.readMin} {t.read} · {t.author}
         </p>
 
@@ -234,7 +206,13 @@ export function PostView({ post }: { post: BlogPost }) {
               {related.map((r) => (
                 <Link
                   key={r.slug}
-                  to={post.lang === "sk" ? "/blog/$slug" : "/blog/en/$slug"}
+                  to={
+                    post.lang === "sk"
+                      ? "/blog/$slug"
+                      : post.lang === "ja"
+                        ? "/blog/ja/$slug"
+                        : "/blog/en/$slug"
+                  }
                   params={{ slug: r.slug }}
                   className="rounded-xl border border-[color:var(--color-border)] p-5 hover:border-[color:var(--color-brand)] transition-colors"
                 >
@@ -249,12 +227,12 @@ export function PostView({ post }: { post: BlogPost }) {
         )}
       </article>
 
-      <StickyCta lang={post.lang} msg={t.stickyMsg} cta={t.stickyCta} />
+      <StickyCta msg={t.stickyMsg} cta={t.cta} />
     </main>
   );
 }
 
-function StickyCta({ lang: _lang, msg, cta }: { lang: "sk" | "en"; msg: string; cta: string }) {
+function StickyCta({ msg, cta }: { msg: string; cta: string }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 600);
@@ -280,17 +258,14 @@ function StickyCta({ lang: _lang, msg, cta }: { lang: "sk" | "en"; msg: string; 
   );
 }
 
-export function NotFound({ lang }: { lang: "sk" | "en" }) {
-  const t =
-    lang === "sk"
-      ? { msg: "Článok sa nenašiel.", back: "Späť na blog" }
-      : { msg: "Article not found.", back: "Back to blog" };
+export function NotFound({ lang }: { lang: BlogLang }) {
+  const t = BLOG_I18N[lang];
   return (
     <div className="min-h-screen grid place-items-center bg-white text-[color:var(--color-dark)]">
       <div className="text-center">
-        <p>{t.msg}</p>
+        <p>{t.notFound}</p>
         <Link
-          to={lang === "sk" ? "/blog" : "/blog/en"}
+          to={lang === "sk" ? "/blog" : lang === "ja" ? "/blog/ja" : "/blog/en"}
           className="mt-4 inline-block text-[color:var(--color-brand)] underline"
         >
           {t.back}
@@ -298,4 +273,8 @@ export function NotFound({ lang }: { lang: "sk" | "en" }) {
       </div>
     </div>
   );
+}
+
+function blogIndexPath(lang: BlogLang): "/blog" | "/blog/en" | "/blog/ja" {
+  return lang === "sk" ? "/blog" : lang === "ja" ? "/blog/ja" : "/blog/en";
 }

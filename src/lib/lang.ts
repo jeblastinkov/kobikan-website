@@ -27,5 +27,5 @@ export const OG_LOCALE: Record<Lang, string> = {
 };
 
 export function blogHref(lang: Lang) {
-  return lang === "sk" ? "/blog" : "/blog/en";
+  return lang === "sk" ? "/blog" : lang === "ja" ? "/blog/ja" : "/blog/en";
 }

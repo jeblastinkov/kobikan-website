@@ -18,6 +18,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/blog", changefreq: "weekly", priority: "0.8" },
           { path: "/blog/en", changefreq: "weekly", priority: "0.8" },
+          { path: "/blog/ja", changefreq: "weekly", priority: "0.8" },
           ...POSTS.map((p) => ({
             path: postUrl(p),
             lastmod: p.date,

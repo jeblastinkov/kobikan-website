@@ -1,61 +1,37 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { postsByLang, SITE_URL, type BlogPost } from "@/lib/blog-posts";
+import { postsByLang, SITE_URL, type BlogLang, type BlogPost } from "@/lib/blog-posts";
+import { BLOG_I18N } from "@/lib/i18n";
 
 export const Route = createFileRoute("/blog/")({
   component: BlogIndexSK,
-  head: () => ({
-    meta: [
-      { title: "Blog — KobiKan: AI v priemyselnej údržbe" },
-      {
-        name: "description",
-        content:
-          "Praktické články o AI v priemyselnej výrobe a údržbe — implementácia, downtime, zachytávanie znalostí, PLC integrácie.",
-      },
-      { property: "og:title", content: "Blog — KobiKan: AI v priemyselnej údržbe" },
-      {
-        property: "og:description",
-        content:
-          "Praktické články o AI v priemyselnej výrobe a údržbe — implementácia, downtime, zachytávanie znalostí, PLC integrácie.",
-      },
-      { property: "og:url", content: `${SITE_URL}/blog` },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/blog` }],
-  }),
+  head: () => {
+    const t = BLOG_I18N.sk;
+    return {
+      meta: [
+        { title: t.metaTitle },
+        { name: "description", content: t.metaDescription },
+        { property: "og:title", content: t.metaTitle },
+        { property: "og:description", content: t.metaDescription },
+        { property: "og:url", content: `${SITE_URL}/blog` },
+        { property: "og:type", content: "website" },
+      ],
+      links: [
+        { rel: "canonical", href: `${SITE_URL}/blog` },
+        { rel: "alternate", hrefLang: "sk", href: `${SITE_URL}/blog` },
+        { rel: "alternate", hrefLang: "en", href: `${SITE_URL}/blog/en` },
+        { rel: "alternate", hrefLang: "ja", href: `${SITE_URL}/blog/ja` },
+      ],
+    };
+  },
 });
 
 function BlogIndexSK() {
   const posts = postsByLang("sk");
-  return <BlogIndex lang="sk" posts={posts} otherHref="/blog/en" otherLabel="EN" />;
+  return <BlogIndex lang="sk" posts={posts} />;
 }
 
-export function BlogIndex({
-  lang,
-  posts,
-  otherHref,
-  otherLabel,
-}: {
-  lang: "sk" | "en";
-  posts: BlogPost[];
-  otherHref: string;
-  otherLabel: string;
-}) {
-  const t =
-    lang === "sk"
-      ? {
-          eyebrow: "Blog",
-          title: "AI v priemyselnej údržbe",
-          sub: "Praktické články pre tímy údržby, ktoré chcú znížiť výpadky a zachytiť znalosti svojich technikov.",
-          read: "min čítania",
-          back: "Späť na KobiKan",
-        }
-      : {
-          eyebrow: "Blog",
-          title: "AI in industrial maintenance",
-          sub: "Practical articles for maintenance teams that want to reduce downtime and capture technician knowledge.",
-          read: "min read",
-          back: "Back to KobiKan",
-        };
+export function BlogIndex({ lang, posts }: { lang: BlogLang; posts: BlogPost[] }) {
+  const t = BLOG_I18N[lang];
   const pillar = posts.find((p) => p.pillar);
   const rest = posts.filter((p) => !p.pillar);
   return (
@@ -63,14 +39,30 @@ export function BlogIndex({
       <header className="border-b border-[color:var(--color-border)]">
         <div className="container-x flex h-16 items-center justify-between text-sm">
           <Link to="/" className="font-semibold tracking-tight">
-            ← {t.back}
+            ← {t.backToSite}
           </Link>
-          <a
-            href={otherHref}
-            className="text-[color:var(--color-neutral-gray)] hover:text-[color:var(--color-brand)]"
-          >
-            {otherLabel}
-          </a>
+          <nav aria-label="Language" className="flex items-center gap-4">
+            {(
+              [
+                ["sk", "/blog", "SK"],
+                ["en", "/blog/en", "EN"],
+                ["ja", "/blog/ja", "JPN"],
+              ] as const
+            ).map(([code, href, label]) => (
+              <a
+                key={code}
+                href={href}
+                aria-current={lang === code ? "page" : undefined}
+                className={
+                  lang === code
+                    ? "font-semibold text-[color:var(--color-brand)]"
+                    : "text-[color:var(--color-neutral-gray)] hover:text-[color:var(--color-brand)]"
+                }
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
         </div>
       </header>
 
@@ -79,7 +71,7 @@ export function BlogIndex({
         <div className="flex items-center gap-3">
           <span className="h-px w-8 bg-[color:var(--color-brand)]" />
           <span className="text-[color:var(--color-brand)] font-semibold tracking-[0.2em] text-xs uppercase">
-            {lang === "sk" ? "KobiKan Journal" : "The KobiKan Journal"}
+            {t.journal}
           </span>
         </div>
         <h1 className="mt-5 text-5xl md:text-6xl font-display font-semibold tracking-tight max-w-3xl leading-[0.95]">
@@ -92,7 +84,7 @@ export function BlogIndex({
         {/* Pillar — split card */}
         {pillar && (
           <Link
-            to={lang === "sk" ? "/blog/$slug" : "/blog/en/$slug"}
+            to={lang === "sk" ? "/blog/$slug" : lang === "ja" ? "/blog/ja/$slug" : "/blog/en/$slug"}
             params={{ slug: pillar.slug }}
             className="group relative mt-16 block overflow-hidden rounded-3xl bg-[color:var(--color-dark)] transition-shadow duration-500 hover:shadow-2xl hover:shadow-[color:var(--color-brand)]/20"
           >
@@ -108,7 +100,7 @@ export function BlogIndex({
                   {pillar.description}
                 </p>
                 <div className="mt-8 inline-flex items-center gap-3 text-white font-semibold text-sm group-hover:text-[color:var(--color-brand)] transition-colors">
-                  {lang === "sk" ? "Čítať celý článok" : "Read full story"}
+                  {t.readFull}
                   <svg
                     className="w-4 h-4 transition-transform group-hover:translate-x-1"
                     fill="none"
@@ -125,7 +117,9 @@ export function BlogIndex({
                 </div>
                 <p className="mt-8 text-xs text-white/40 tracking-wide">
                   {pillar.readMin} {t.read} ·{" "}
-                  {new Date(pillar.date).toLocaleDateString(lang === "sk" ? "sk-SK" : "en-US")}
+                  {new Date(pillar.date).toLocaleDateString(
+                    lang === "sk" ? "sk-SK" : lang === "ja" ? "ja-JP" : "en-US",
+                  )}
                 </p>
               </div>
               {/* Decorative panel (replaces image) */}
@@ -142,7 +136,7 @@ export function BlogIndex({
                 />
                 <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[color:var(--color-dark)] to-transparent md:block hidden" />
                 <div className="absolute bottom-6 right-6 text-[10px] uppercase tracking-[0.3em] text-white/40">
-                  {lang === "sk" ? "Sprievodca" : "Pillar"}
+                  {t.pillar}
                 </div>
               </div>
             </div>
@@ -155,7 +149,9 @@ export function BlogIndex({
           {rest.map((p) => (
             <Link
               key={p.slug}
-              to={lang === "sk" ? "/blog/$slug" : "/blog/en/$slug"}
+              to={
+                lang === "sk" ? "/blog/$slug" : lang === "ja" ? "/blog/ja/$slug" : "/blog/en/$slug"
+              }
               params={{ slug: p.slug }}
               className="group flex flex-col"
             >

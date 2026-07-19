@@ -15,7 +15,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiContactRouteImport } from './routes/api.contact'
+import { Route as BlogJaIndexRouteImport } from './routes/blog.ja.index'
 import { Route as BlogEnIndexRouteImport } from './routes/blog.en.index'
+import { Route as BlogJaSlugRouteImport } from './routes/blog.ja.$slug'
 import { Route as BlogEnSlugRouteImport } from './routes/blog.en.$slug'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -48,9 +50,19 @@ const ApiContactRoute = ApiContactRouteImport.update({
   path: '/api/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogJaIndexRoute = BlogJaIndexRouteImport.update({
+  id: '/blog/ja/',
+  path: '/blog/ja/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogEnIndexRoute = BlogEnIndexRouteImport.update({
   id: '/blog/en/',
   path: '/blog/en/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogJaSlugRoute = BlogJaSlugRouteImport.update({
+  id: '/blog/ja/$slug',
+  path: '/blog/ja/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogEnSlugRoute = BlogEnSlugRouteImport.update({
@@ -67,7 +79,9 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/blog/en/$slug': typeof BlogEnSlugRoute
+  '/blog/ja/$slug': typeof BlogJaSlugRoute
   '/blog/en/': typeof BlogEnIndexRoute
+  '/blog/ja/': typeof BlogJaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,7 +91,9 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
   '/blog/en/$slug': typeof BlogEnSlugRoute
+  '/blog/ja/$slug': typeof BlogJaSlugRoute
   '/blog/en': typeof BlogEnIndexRoute
+  '/blog/ja': typeof BlogJaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,7 +104,9 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/blog/en/$slug': typeof BlogEnSlugRoute
+  '/blog/ja/$slug': typeof BlogJaSlugRoute
   '/blog/en/': typeof BlogEnIndexRoute
+  '/blog/ja/': typeof BlogJaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,7 +118,9 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/blog/'
     | '/blog/en/$slug'
+    | '/blog/ja/$slug'
     | '/blog/en/'
+    | '/blog/ja/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -110,7 +130,9 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/blog'
     | '/blog/en/$slug'
+    | '/blog/ja/$slug'
     | '/blog/en'
+    | '/blog/ja'
   id:
     | '__root__'
     | '/'
@@ -120,7 +142,9 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/blog/'
     | '/blog/en/$slug'
+    | '/blog/ja/$slug'
     | '/blog/en/'
+    | '/blog/ja/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -131,7 +155,9 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   BlogEnSlugRoute: typeof BlogEnSlugRoute
+  BlogJaSlugRoute: typeof BlogJaSlugRoute
   BlogEnIndexRoute: typeof BlogEnIndexRoute
+  BlogJaIndexRoute: typeof BlogJaIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -178,11 +204,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/ja/': {
+      id: '/blog/ja/'
+      path: '/blog/ja'
+      fullPath: '/blog/ja/'
+      preLoaderRoute: typeof BlogJaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/en/': {
       id: '/blog/en/'
       path: '/blog/en'
       fullPath: '/blog/en/'
       preLoaderRoute: typeof BlogEnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/ja/$slug': {
+      id: '/blog/ja/$slug'
+      path: '/blog/ja/$slug'
+      fullPath: '/blog/ja/$slug'
+      preLoaderRoute: typeof BlogJaSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/en/$slug': {
@@ -203,7 +243,9 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   BlogEnSlugRoute: BlogEnSlugRoute,
+  BlogJaSlugRoute: BlogJaSlugRoute,
   BlogEnIndexRoute: BlogEnIndexRoute,
+  BlogJaIndexRoute: BlogJaIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
