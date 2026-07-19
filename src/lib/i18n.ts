@@ -11,6 +11,7 @@ export type Dict = {
     about: string;
     faq: string;
     cta: string;
+    calculator: string;
   };
   hero: {
     eyebrow: string;
@@ -125,6 +126,7 @@ export const T: Record<Lang, Dict> = {
       about: "O nás",
       faq: "FAQ",
       cta: "Naplánovať demo",
+      calculator: "Kalkulačka úspor",
     },
     hero: {
       eyebrow: "AI asistent pre údržbu",
@@ -403,6 +405,7 @@ export const T: Record<Lang, Dict> = {
       about: "About",
       faq: "FAQ",
       cta: "Book a Demo",
+      calculator: "ROI Calculator",
     },
     hero: {
       eyebrow: "AI Maintenance Assistant",
@@ -688,6 +691,7 @@ export const T: Record<Lang, Dict> = {
       about: "会社概要",
       faq: "FAQ",
       cta: "デモを予約",
+      calculator: "ROI計算ツール",
     },
     hero: {
       eyebrow: "メンテナンス向けAIアシスタント",
@@ -957,6 +961,7 @@ export const T: Record<Lang, Dict> = {
       about: "Über uns",
       faq: "FAQ",
       cta: "Demo buchen",
+      calculator: "ROI-Rechner",
     },
     hero: {
       eyebrow: "KI-Wartungsassistent",
@@ -1249,6 +1254,7 @@ export const T: Record<Lang, Dict> = {
       about: "O nás",
       faq: "FAQ",
       cta: "Naplánovat demo",
+      calculator: "Kalkulačka úspor",
     },
     hero: {
       eyebrow: "AI asistent pro údržbu",

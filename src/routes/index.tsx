@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState, useRef, type ReactNode, type FormEvent } from "react";
+import { useEffect, useState, useRef, type ReactNode } from "react";
 import { T, type Lang } from "@/lib/i18n";
 import { blogHref, HTML_LANG, LANG_LABELS, LANG_ORDER, OG_LOCALE } from "@/lib/lang";
 import { getVisitorLanguage, JAPAN_LANGUAGES, LANGUAGE_COOKIE } from "@/lib/visitor-language";
 import { CookieBanner } from "@/components/CookieBanner";
+import { Logo } from "@/components/Logo";
+import { ContactModal } from "@/components/ContactModal";
 
 import { SmoothScroll } from "@/components/cinematic/SmoothScroll";
 import { CinematicVideo } from "@/components/cinematic/CinematicVideo";
@@ -39,7 +41,7 @@ export const Route = createFileRoute("/")({
   component: Landing,
   head: ({ loaderData }) => {
     const lang = loaderData?.language ?? "en";
-    const pageUrl = loaderData?.isJapanEdition ? "https://kobikan.jp" : SITE_URL;
+    const pageUrl = loaderData?.isJapanEdition ? "https://www.kobikan.jp" : SITE_URL;
     const t = T[lang];
 
     return {
@@ -66,7 +68,7 @@ export const Route = createFileRoute("/")({
       links: [
         { rel: "canonical", href: `${pageUrl}/` },
         { rel: "alternate", hrefLang: "en", href: `${SITE_URL}/` },
-        { rel: "alternate", hrefLang: "ja", href: "https://kobikan.jp/" },
+        { rel: "alternate", hrefLang: "ja", href: "https://www.kobikan.jp/" },
         { rel: "alternate", hrefLang: "sk", href: `${SITE_URL}/` },
         { rel: "alternate", hrefLang: "de", href: `${SITE_URL}/` },
         { rel: "alternate", hrefLang: "cs", href: `${SITE_URL}/` },
@@ -167,15 +169,16 @@ function Landing() {
       <Faq t={t} />
       <FinalCta t={t} onCta={openModal} />
       <Footer t={t} />
-      {open && <ContactModal t={t} onClose={() => setOpen(false)} />}
+      {open && (
+        <ContactModal
+          form={t.form}
+          successLinkLabel={t.nav.contact}
+          onClose={() => setOpen(false)}
+        />
+      )}
       <CookieBanner lang={lang} />
     </div>
   );
-}
-
-/* ---------- Logo ---------- */
-function Logo({ className = "" }: { className?: string }) {
-  return <img src="/kobikan-logo.svg" alt="KobiKan" className={`h-8 w-auto ${className}`} />;
 }
 
 /* ---------- Nav ---------- */
@@ -231,6 +234,12 @@ function Nav({
             className="hover:text-[color:var(--color-brand)] transition-colors"
           >
             Blog
+          </Link>
+          <Link
+            to="/roi-calculator"
+            className="hover:text-[color:var(--color-brand)] transition-colors"
+          >
+            {t.nav.calculator}
           </Link>
         </nav>
         <div className="flex items-center gap-3">
@@ -1164,6 +1173,9 @@ function Footer({ t }: { t: typeof T.sk }) {
           <a href="#contact" className="block hover:text-white">
             {t.nav.contact}
           </a>
+          <Link to="/roi-calculator" className="block hover:text-white">
+            {t.nav.calculator}
+          </Link>
         </div>
       </div>
       <div className="container-x mt-10 pt-6 border-t border-white/10 text-xs text-white/40 flex flex-wrap justify-between gap-3">
@@ -1185,157 +1197,5 @@ function SectionLabel({ children, dark = false }: { children: ReactNode; dark?: 
       <span className="h-px w-6 bg-[color:var(--color-brand)]" />
       {children}
     </span>
-  );
-}
-
-/* ---------- Contact Modal ---------- */
-function ContactModal({ t, onClose }: { t: typeof T.sk; onClose: () => void }) {
-  const [sent, setSent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-  }, [onClose]);
-
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setSubmitting(true);
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.get("name"),
-          company: formData.get("company"),
-          email: formData.get("email"),
-          phone: formData.get("phone") ?? "",
-          message: formData.get("message") ?? "",
-        }),
-      });
-
-      if (!response.ok) {
-        setError(t.form.error);
-        return;
-      }
-
-      setSent(true);
-    } catch {
-      setError(t.form.error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white rounded-xl w-full max-w-lg shadow-2xl overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[color:var(--color-border)]">
-          <h3 className="font-semibold text-lg">{t.form.title}</h3>
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            className="text-[color:var(--color-neutral-gray)] hover:text-[color:var(--color-dark)] text-2xl leading-none"
-          >
-            ×
-          </button>
-        </div>
-        {sent ? (
-          <div className="p-8 text-center">
-            <div className="text-3xl">✓</div>
-            <p className="mt-3 text-[color:var(--color-dark)]">{t.form.success}</p>
-            <button
-              onClick={onClose}
-              className="mt-6 text-sm text-[color:var(--color-brand)] font-medium"
-            >
-              {t.nav.contact} →
-            </button>
-          </div>
-        ) : (
-          <form onSubmit={onSubmit} className="p-6 space-y-3">
-            <Field name="name" label={t.form.name} required disabled={submitting} />
-            <Field name="company" label={t.form.company} required disabled={submitting} />
-            <Field name="email" label={t.form.email} type="email" required disabled={submitting} />
-            <Field name="phone" label={t.form.phone} type="tel" disabled={submitting} />
-            <Field name="message" label={t.form.message} textarea disabled={submitting} />
-            {error && (
-              <p className="text-sm text-[color:var(--color-brand)]" role="alert">
-                {error}
-              </p>
-            )}
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full mt-2 rounded-md bg-[color:var(--color-brand)] text-white py-3 font-semibold hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {submitting ? t.form.submitting : t.form.submit}
-            </button>
-          </form>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function Field({
-  name,
-  label,
-  type = "text",
-  required,
-  textarea,
-  disabled,
-}: {
-  name: string;
-  label: string;
-  type?: string;
-  required?: boolean;
-  textarea?: boolean;
-  disabled?: boolean;
-}) {
-  const cls =
-    "mt-1 w-full rounded-md border border-[color:var(--color-border)] px-3 py-2 text-sm focus:outline-none focus:border-[color:var(--color-brand)] focus:ring-2 focus:ring-[color:var(--color-brand)]/20 disabled:opacity-60 disabled:cursor-not-allowed";
-  return (
-    <label className="block">
-      <span className="text-xs font-medium text-[color:var(--color-dark)]">
-        {label}
-        {required && " *"}
-      </span>
-      {textarea ? (
-        <textarea
-          name={name}
-          required={required}
-          rows={3}
-          maxLength={1000}
-          disabled={disabled}
-          className={cls}
-        />
-      ) : (
-        <input
-          name={name}
-          type={type}
-          required={required}
-          maxLength={255}
-          disabled={disabled}
-          className={cls}
-        />
-      )}
-    </label>
   );
 }
