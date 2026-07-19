@@ -80,15 +80,15 @@ export const EUR_LOCALE: Record<Lang, string> = {
 
 export const CALC_T: Record<Lang, CalculatorCopy> = {
   sk: {
-    metaTitle: "Kalkulačka úspor — KobiKan",
+    metaTitle: "ROI kalkulačka — KobiKan",
     metaDescription:
       "Zistite, koľko vám KobiKan ušetrí ročne: čas technikov strávený hľadaním, rýchlejšie opravy a zachytené znalosti seniorov.",
 
     back: "Späť na hlavnú",
-    eyebrow: "Kalkulačka úspor",
+    eyebrow: "ROI kalkulačka",
     h1a: "Koľko vás stojí,",
     h1b: "že KobiKan ešte nemáte.",
-    sub: "6 jednoduchých otázok o vašej údržbe. Výsledok vidíte hneď vpravo — bez formulárov, bez registrácie.",
+    sub: "6 rýchlych otázok o údržbe. Výsledok hneď vpravo — bez formulárov.",
 
     resultLabel: "Toľko ročne strácate",
     perYear: "/ rok",
@@ -100,7 +100,7 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     q1hint: "Ľudia, ktorí opravujú stroje.",
 
     q2: "Koľko hodín denne strávi jeden technik hľadaním informácií?",
-    q2hint: "Manuály, schémy, staré emaily, otázky kolegov. Bežne 1–2 hodiny denne.",
+    q2hint: "Manuály, schémy, e-maily, kolegovia. Bežne 1–2 h denne.",
     q2unit: "h / deň",
 
     q3: "Koľko neplánovaných porúch máte mesačne?",
@@ -123,7 +123,7 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     increase: "Zvýšiť hodnotu",
 
     breakdownTitle: "Kde vám tečú peniaze",
-    b1: "Technici hľadajú namiesto opravovania",
+    b1: "Technici hľadajú info namiesto opravovania",
     b1sub: "Každá hodina hľadania = hodina, ktorú vám nikto nevráti.",
     b2: "Stroje stoja dlhšie ako musia",
     b2sub: "Pomalá oprava = drahý prestoj.",
@@ -140,27 +140,26 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     ctaSecondary: "Pozrieť riešenie",
 
     howTitle: "Ako to počítame — bez matematiky",
-    howLead:
-      "Kalkulačka nič nevymýšľa. Berie vaše čísla a spočíta tri jednoduché veci, ktoré poznáte z vlastnej dielne.",
+    howLead: "Kalkulačka sčíta tri veci, ktoré poznáte z vlastnej dielne.",
     how1title: "1. Stratený čas technikov",
-    how1: "Ak jeden technik hľadá informácie napríklad 1,5 hodiny denne, za rok (220 pracovných dní) je to viac ako 330 hodín. Vynásobíme počtom technikov a ich hodinovou sadzbou (predvolene 35 € / h — dá sa upraviť). KobiKan hľadanie skracuje o zhruba 65 %, lebo odpoveď dostanete okamžite z jedného miesta.",
+    how1: "Technik hľadajúci 1,5 h denne stratí ročne 330+ hodín (220 dní). Vynásobené počtom technikov a sadzbou (35 € / h). KobiKan skracuje hľadanie o ~65 % vďaka okamžitej odpovedi z jedného miesta.",
     how2title: "2. Predĺžené prestoje strojov",
-    how2: "Vezmeme počet porúch za mesiac, prenásobíme 12 mesiacmi, priemernou dĺžkou opravy a cenou jednej hodiny prestoja. To je suma, ktorú stratíte len tým, že stroj stojí. Skúsenosť z prevádzok hovorí, že rýchly prístup k dokumentácii a histórii porúch skracuje priemerný čas opravy (MTTR) o približne 26 %.",
+    how2: "Poruchy / mesiac × 12 × dĺžka opravy × cena prestoja = strata z nečinných strojov. Rýchly prístup k dokumentácii skracuje MTTR o ~26 %.",
     how3title: "3. Odchod znalostí spolu s ľuďmi",
-    how3: "Keď odíde skúsený údržbár, s ním odíde aj to, čo mal iba v hlave. Predvolene počítame hodnotu jedného seniora na 80 000 € (roky nezapísaných postupov, rýchlych fintov, kontaktov na dodávateľov). KobiKan tieto znalosti zachytáva priebežne — odhadujeme, že sa podarí udržať približne 80 % z nich.",
+    how3: "Odchodom seniora mizne aj jeho know-how. Počítame s hodnotou 80 000 € na seniora. KobiKan znalosti priebežne zachytáva — udrží sa odhadom 80 %.",
     howFoot:
-      "Predpoklady: 220 pracovných dní / rok · hodinová sadzba technika 35 € · hodnota seniora 80 000 € · implementácia KobiKan jednorazovo 10 000 €. Všetko sú konzervatívne priemery — reálne čísla u vás sa dozviete v audite.",
+      "Predpoklady: 220 dní / rok · 35 € / h · 80 000 € hodnota seniora · 10 000 € implementácia. Konzervatívne priemery — presné čísla dá audit.",
   },
   en: {
-    metaTitle: "Savings Calculator — KobiKan",
+    metaTitle: "ROI Calculator — KobiKan",
     metaDescription:
       "See how much KobiKan saves you per year: technician search time, faster repairs, and captured senior know-how.",
 
     back: "Back to home",
-    eyebrow: "Savings calculator",
+    eyebrow: "ROI Calculator",
     h1a: "What it costs you",
     h1b: "not to have KobiKan.",
-    sub: "6 simple questions about your maintenance. See the result on the right — no forms, no signup.",
+    sub: "6 quick questions about your maintenance. Results appear instantly — no forms, no signup.",
 
     resultLabel: "This is what you lose per year",
     perYear: "/ year",
@@ -172,7 +171,7 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     q1hint: "The people who fix the machines.",
 
     q2: "How many hours a day does one technician spend searching for information?",
-    q2hint: "Manuals, schematics, old emails, asking colleagues. Usually 1–2 hours a day.",
+    q2hint: "Manuals, schematics, emails, colleagues. Usually 1–2 hours a day.",
     q2unit: "h / day",
 
     q3: "How many unplanned breakdowns do you have per month?",
@@ -212,27 +211,26 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     ctaSecondary: "See the solution",
 
     howTitle: "How we calculate this — no math required",
-    howLead:
-      "The calculator doesn't invent anything. It takes your numbers and adds up three simple things you already know from your own shop floor.",
+    howLead: "The calculator adds up three things you already know from your shop floor.",
     how1title: "1. Lost technician time",
-    how1: "If a technician spends, say, 1.5 hours a day searching for information, that's over 330 hours per year (220 working days). Multiply by the number of technicians and their hourly rate (default 35 € / h — adjustable). KobiKan cuts search time by roughly 65 % because the answer arrives instantly from a single place.",
+    how1: "A technician searching 1.5 h/day loses 330+ hours a year (220 working days) — multiplied by technician count and hourly rate (€35/h). KobiKan cuts search time by ~65 % with instant answers from one place.",
     how2title: "2. Extended machine downtime",
-    how2: "We take the number of breakdowns per month × 12 months × average repair time × downtime cost per hour. That is the amount you lose purely because the machine is standing still. Plant experience shows fast access to documentation and history shortens the average repair time (MTTR) by about 26 %.",
+    how2: "Breakdowns/month × 12 × repair time × downtime cost = what you lose from idle machines. Fast access to documentation cuts repair time (MTTR) by ~26 %.",
     how3title: "3. Knowledge leaving with the people",
-    how3: "When a senior technician leaves, everything they only kept in their head leaves with them. We default the value of one senior to €80,000 (years of undocumented procedures, quick fixes, supplier contacts). KobiKan captures this knowledge continuously — we estimate roughly 80 % is retained.",
+    how3: "When a senior leaves, their undocumented know-how leaves too. We value one senior at €80,000. KobiKan captures this knowledge continuously — retaining an estimated 80 %.",
     howFoot:
-      "Assumptions: 220 working days / year · technician hourly rate €35 · senior value €80,000 · KobiKan implementation one-off €10,000. All are conservative averages — your real numbers come out in the audit.",
+      "Assumptions: 220 working days/year · €35/h technician rate · €80,000 senior value · €10,000 one-off implementation. Conservative averages — get your real numbers in an audit.",
   },
   de: {
-    metaTitle: "Einsparungsrechner — KobiKan",
+    metaTitle: "ROI-Rechner — KobiKan",
     metaDescription:
       "Erfahren Sie, wie viel KobiKan Ihnen jährlich spart: Suchzeit der Techniker, schnellere Reparaturen und gesichertes Senior-Know-how.",
 
     back: "Zurück zur Startseite",
-    eyebrow: "Einsparungsrechner",
+    eyebrow: "ROI-Rechner",
     h1a: "Was es Sie kostet,",
     h1b: "KobiKan noch nicht zu haben.",
-    sub: "6 einfache Fragen zu Ihrer Instandhaltung. Das Ergebnis sehen Sie sofort rechts — ohne Formulare, ohne Registrierung.",
+    sub: "6 kurze Fragen zur Instandhaltung. Ergebnis sofort rechts — ohne Formular.",
 
     resultLabel: "So viel verlieren Sie jährlich",
     perYear: "/ Jahr",
@@ -244,7 +242,7 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     q1hint: "Die Menschen, die die Maschinen reparieren.",
 
     q2: "Wie viele Stunden pro Tag verbringt ein Techniker mit der Suche nach Informationen?",
-    q2hint: "Handbücher, Schaltpläne, alte E-Mails, Fragen an Kollegen. Meist 1–2 Stunden am Tag.",
+    q2hint: "Handbücher, Pläne, E-Mails, Kollegen. Meist 1–2 Std./Tag.",
     q2unit: "h / Tag",
 
     q3: "Wie viele ungeplante Ausfälle haben Sie pro Monat?",
@@ -284,27 +282,26 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     ctaSecondary: "Lösung ansehen",
 
     howTitle: "So rechnen wir — ohne Mathematik",
-    howLead:
-      "Der Rechner erfindet nichts. Er nimmt Ihre Zahlen und addiert drei einfache Dinge, die Sie aus Ihrer eigenen Werkstatt kennen.",
+    howLead: "Der Rechner addiert drei Dinge, die Sie aus Ihrer Werkstatt kennen.",
     how1title: "1. Verlorene Technikerzeit",
-    how1: "Wenn ein Techniker beispielsweise 1,5 Stunden täglich mit der Informationssuche verbringt, sind das über 330 Stunden pro Jahr (220 Arbeitstage). Multipliziert mit der Anzahl der Techniker und ihrem Stundensatz (Standard 35 € / h — anpassbar). KobiKan verkürzt die Suchzeit um rund 65 %, weil die Antwort sofort aus einer einzigen Quelle kommt.",
+    how1: "Ein Techniker mit 1,5 Std./Tag Suche verliert 330+ Std./Jahr (220 Tage), × Technikerzahl × Stundensatz (35 €/h). KobiKan senkt die Suchzeit um ~65 % durch sofortige Antworten aus einer Quelle.",
     how2title: "2. Verlängerte Maschinenstillstände",
-    how2: "Wir nehmen die Anzahl der Ausfälle pro Monat × 12 Monate × durchschnittliche Reparaturzeit × Stillstandskosten pro Stunde. Das ist der Betrag, den Sie allein dadurch verlieren, dass die Maschine stillsteht. Erfahrungen aus der Praxis zeigen: schneller Zugriff auf Dokumentation und Historie verkürzt die durchschnittliche Reparaturzeit (MTTR) um etwa 26 %.",
+    how2: "Ausfälle/Monat × 12 × Reparaturzeit × Stillstandskosten = Verlust durch stehende Maschinen. Schneller Dokumentenzugriff senkt die MTTR um ~26 %.",
     how3title: "3. Wissen, das mit den Mitarbeitern geht",
-    how3: "Wenn ein erfahrener Techniker geht, geht auch alles mit, was nur in seinem Kopf war. Standardmäßig setzen wir den Wert eines Senior-Mitarbeiters mit 80.000 € an (Jahre nicht dokumentierter Abläufe, Kniffe, Lieferantenkontakte). KobiKan erfasst dieses Wissen fortlaufend — wir schätzen, dass rund 80 % davon erhalten bleiben.",
+    how3: "Geht ein Senior, geht sein Know-how mit. Wir setzen 80.000 € pro Senior an. KobiKan sichert dieses Wissen laufend — geschätzt bleiben ~80 % erhalten.",
     howFoot:
-      "Annahmen: 220 Arbeitstage / Jahr · Stundensatz Techniker 35 € · Wert eines Senior-Mitarbeiters 80.000 € · einmalige KobiKan-Implementierung 10.000 €. Alles konservative Durchschnittswerte — Ihre tatsächlichen Zahlen erfahren Sie im Audit.",
+      "Annahmen: 220 Tage/Jahr · 35 €/h · 80.000 € Senior-Wert · 10.000 € Einmalimplementierung. Konservative Werte — genaue Zahlen liefert das Audit.",
   },
   cs: {
-    metaTitle: "Kalkulačka úspor — KobiKan",
+    metaTitle: "ROI kalkulačka — KobiKan",
     metaDescription:
       "Zjistěte, kolik vám KobiKan ušetří ročně: čas techniků strávený hledáním, rychlejší opravy a zachycené znalosti seniorů.",
 
     back: "Zpět na hlavní",
-    eyebrow: "Kalkulačka úspor",
+    eyebrow: "ROI kalkulačka",
     h1a: "Kolik vás stojí,",
     h1b: "že KobiKan ještě nemáte.",
-    sub: "6 jednoduchých otázek o vaší údržbě. Výsledek vidíte hned vpravo — bez formulářů, bez registrace.",
+    sub: "6 rychlých otázek o údržbě. Výsledek hned vpravo — bez formulářů.",
 
     resultLabel: "Tolik ročně ztrácíte",
     perYear: "/ rok",
@@ -316,7 +313,7 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     q1hint: "Lidé, kteří opravují stroje.",
 
     q2: "Kolik hodin denně stráví jeden technik hledáním informací?",
-    q2hint: "Manuály, schémata, staré e-maily, dotazy kolegů. Obvykle 1–2 hodiny denně.",
+    q2hint: "Manuály, schémata, e-maily, kolegové. Obvykle 1–2 h denně.",
     q2unit: "h / den",
 
     q3: "Kolik neplánovaných poruch máte měsíčně?",
@@ -356,27 +353,26 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     ctaSecondary: "Podívat se na řešení",
 
     howTitle: "Jak to počítáme — bez matematiky",
-    howLead:
-      "Kalkulačka nic nevymýšlí. Bere vaše čísla a sečte tři jednoduché věci, které znáte z vlastní dílny.",
+    howLead: "Kalkulačka sečte tři věci, které znáte z vlastní dílny.",
     how1title: "1. Ztracený čas techniků",
-    how1: "Pokud jeden technik hledá informace například 1,5 hodiny denně, za rok (220 pracovních dní) je to přes 330 hodin. Vynásobíme počtem techniků a jejich hodinovou sazbou (výchozí 35 € / h — lze upravit). KobiKan hledání zkracuje o zhruba 65 %, protože odpověď dostanete okamžitě z jednoho místa.",
+    how1: "Technik hledající 1,5 h denně ztratí ročně 330+ hodin (220 dní), × počet techniků × sazba (35 € / h). KobiKan zkracuje hledání o ~65 % díky okamžité odpovědi z jednoho místa.",
     how2title: "2. Prodloužené výpadky strojů",
-    how2: "Vezmeme počet poruch za měsíc, vynásobíme 12 měsíci, průměrnou délkou opravy a cenou jedné hodiny výpadku. To je částka, kterou ztratíte jen tím, že stroj stojí. Zkušenosti z provozů ukazují, že rychlý přístup k dokumentaci a historii poruch zkracuje průměrný čas opravy (MTTR) přibližně o 26 %.",
+    how2: "Poruchy / měsíc × 12 × délka opravy × cena výpadku = ztráta ze stojících strojů. Rychlý přístup k dokumentaci zkracuje MTTR o ~26 %.",
     how3title: "3. Odchod znalostí spolu s lidmi",
-    how3: "Když odejde zkušený údržbář, odejde s ním i to, co měl jen v hlavě. Výchozí hodnota jednoho seniora je 80 000 € (roky nezapsaných postupů, rychlých finiek, kontaktů na dodavatele). KobiKan tyto znalosti zachycuje průběžně — odhadujeme, že se podaří udržet přibližně 80 % z nich.",
+    how3: "Odchodem seniora mizí i jeho know-how. Počítáme s hodnotou 80 000 € na seniora. KobiKan znalosti průběžně zachycuje — udrží se odhadem 80 %.",
     howFoot:
-      "Předpoklady: 220 pracovních dní / rok · hodinová sazba technika 35 € · hodnota seniora 80 000 € · implementace KobiKan jednorázově 10 000 €. Vše jsou konzervativní průměry — reálná čísla u vás zjistíte v auditu.",
+      "Předpoklady: 220 dní / rok · 35 € / h · 80 000 € hodnota seniora · 10 000 € implementace. Konzervativní průměry — přesná čísla dá audit.",
   },
   ja: {
-    metaTitle: "コスト削減シミュレーター — KobiKan",
+    metaTitle: "ROI計算ツール — KobiKan",
     metaDescription:
       "KobiKanが年間どれだけ節約できるかを試算します：技術者の検索時間、修理の迅速化、ベテランの知識継承。",
 
     back: "ホームに戻る",
-    eyebrow: "コスト削減シミュレーター",
+    eyebrow: "ROI計算ツール",
     h1a: "KobiKanがまだないことで、",
     h1b: "あなたが失っているコスト。",
-    sub: "メンテナンスに関する6つの簡単な質問。結果はすぐ右側に表示されます — フォーム入力も登録も不要です。",
+    sub: "メンテナンスに関する6つの質問。結果はすぐ右に表示 — フォーム不要。",
 
     resultLabel: "年間の損失額",
     perYear: "/ 年",
@@ -388,7 +384,7 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     q1hint: "機械を修理する人たちです。",
 
     q2: "技術者1人あたり、情報検索に1日何時間かかっていますか?",
-    q2hint: "マニュアル、図面、古いメール、同僚への質問。通常1〜2時間/日です。",
+    q2hint: "マニュアル、図面、メール、同僚への確認。通常1〜2時間/日。",
     q2unit: "時間 / 日",
 
     q3: "月に何件の突発的な故障が発生していますか?",
@@ -428,15 +424,14 @@ export const CALC_T: Record<Lang, CalculatorCopy> = {
     ctaSecondary: "ソリューションを見る",
 
     howTitle: "計算方法 — 難しい数式は不要です",
-    howLead:
-      "このシミュレーターは何も作り出しません。あなたの数字をもとに、現場でよく知られている3つの要素を単純に合計するだけです。",
+    howLead: "現場でおなじみの3つの要素を合計するだけです。",
     how1title: "1. 技術者の失われた時間",
-    how1: "技術者1人が1日1.5時間情報検索に費やすとすると、年間(220営業日)で330時間を超えます。これに技術者数と時給(デフォルト35€/時間 — 調整可能)を掛け合わせます。KobiKanは1か所から即座に回答が得られるため、検索時間を約65%削減します。",
+    how1: "1日1.5時間検索する技術者は年間330時間以上を失います(220日)。技術者数×時給(35€/時)。KobiKanは1か所からの即答で検索時間を約65%削減。",
     how2title: "2. 延長された機械停止時間",
-    how2: "月間の故障件数 × 12か月 × 平均修理時間 × 1時間あたりの停止コストで計算します。これは機械が停止しているだけで失う金額です。現場の経験から、ドキュメントと履歴への迅速なアクセスにより平均修理時間(MTTR)が約26%短縮されることが分かっています。",
+    how2: "月間故障数×12×修理時間×停止コスト=停止による損失。迅速な資料アクセスでMTTRを約26%短縮。",
     how3title: "3. 人とともに失われる知識",
-    how3: "ベテラン技術者が退職すると、その人の頭の中にしかなかった知識も一緒に失われます。デフォルトでは、ベテラン1人の価値を80,000€としています(未記録の手順、応急処置のコツ、サプライヤーとの連絡先など、長年の蓄積)。KobiKanはこの知識を継続的に蓄積し、約80%を保持できると見積もっています。",
+    how3: "ベテランの退職とともに知識も失われます。1人あたり80,000€と算定。KobiKanは知識を継続的に蓄積し、約80%を保持。",
     howFoot:
-      "前提条件: 年間220営業日 · 技術者の時給35€ · ベテラン1人の価値80,000€ · KobiKan導入費用(一括)10,000€。いずれも保守的な平均値であり、実際の数字は監査で明らかになります。",
+      "前提: 年間220日・時給35€・ベテラン価値80,000€・導入費10,000€。保守的な平均値 — 正確な数字は監査で。",
   },
 };

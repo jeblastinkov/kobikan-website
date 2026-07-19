@@ -126,7 +126,7 @@ export const T: Record<Lang, Dict> = {
       about: "O nás",
       faq: "FAQ",
       cta: "Naplánovať demo",
-      calculator: "Kalkulačka úspor",
+      calculator: "ROI kalkulačka",
     },
     hero: {
       eyebrow: "AI asistent pre údržbu",
@@ -1254,7 +1254,7 @@ export const T: Record<Lang, Dict> = {
       about: "O nás",
       faq: "FAQ",
       cta: "Naplánovat demo",
-      calculator: "Kalkulačka úspor",
+      calculator: "ROI kalkulačka",
     },
     hero: {
       eyebrow: "AI asistent pro údržbu",
